@@ -1,0 +1,59 @@
+project:
+  type: book
+
+book:
+  title: "Building Reproducible Analytical Pipelines"
+  subtitle: "Master of Data Science, University of Luxembourg - 2023"
+  author: "Bruno Rodrigues"
+  date: "2023-11-20"
+  search: true
+  repo-url: "https://github.com/b-rodrigues/rap4mads_2023"
+  repo-actions: [edit]
+  sharing: [twitter, facebook]
+  downloads: [pdf, epub]
+  chapters:
+    - index.qmd
+    - nix_nixpkgs.qmd
+    - nix_actions.qmd
+    - conclusion.qmd
+  page-navigation: true
+
+bibliography: references.bib
+
+format:
+  epub:
+    toc:
+      true
+    lang:
+      en-GB
+    date:
+      "2023-10-19"
+    css:
+      epub.css
+  html:
+    include-in-header:
+      file: header.html
+    theme:
+      light: flatly
+      dark: solar
+    css:
+      epub.css
+  pdf:
+    keep-tex: true
+    documentclass: scrbook
+    classoption: [paper=6in:9in,pagesize=pdftex,headinclude=on,footinclude=on,12pt]
+    include-in-header:
+      text: |
+        \usepackage{fvextra}
+        \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+        \areaset[0.50in]{4.5in}{8in}
+    include-before-body:
+      text: |
+        \RecustomVerbatimEnvironment{verbatim}{Verbatim}{
+           showspaces = false,
+           showtabs = false,
+           breaksymbolleft={},
+           breaklines
+           % Note: setting commandchars=\\\{\} here will cause an error 
+        }  
+    fig-pos: 'H'
