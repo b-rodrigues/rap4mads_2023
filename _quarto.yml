@@ -14,6 +14,7 @@ book:
   chapters:
     - index.qmd
     - 02-intro_R.qmd
+    - 03-functional-programming.qmd
   page-navigation: true
 
 bibliography: references.bib
