@@ -1,0 +1,34 @@
+name: Build book using Nix
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Install Nix
+      uses: DeterminateSystems/nix-installer-action@main
+      with:
+        logger: pretty
+        log-directives: nix_installer=trace
+        backtrace: full
+
+    - name: Nix cache
+      uses: DeterminateSystems/magic-nix-cache-action@main
+
+    - name: Build development environment
+      run: |
+        nix-build
+
+    - name: Publish to GitHub Pages (and render)
+      uses: b-rodrigues/quarto-nix-actions/publish@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
