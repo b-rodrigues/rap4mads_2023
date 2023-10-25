@@ -419,7 +419,7 @@ that you should know...]
 Once the terminal is opened, follow along but by adapting the paths to your
 computer:
 
-```{bash}
+```{bash, eval = F}
 # The first line changes the working directory to my github repo on my computer
 # If you did not open the terminal inside the folder as explained above, you need
 # adapt the path.
