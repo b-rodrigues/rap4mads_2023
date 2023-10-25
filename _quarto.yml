@@ -13,6 +13,7 @@ book:
   downloads: [pdf, epub]
   chapters:
     - index.qmd
+    - 02-intro_R.qmd
   page-navigation: true
 
 bibliography: references.bib
