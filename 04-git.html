@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Building Reproducible Analytical Pipelines - 3&nbsp; Git</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+/* The extra [class] is a hack that increases specificity enough to
+   override a similar rule in reveal.js */
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  font-size: inherit;
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./03-functional-programming.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<link rel="shortcut icon" href="img/favicon.ico">
+
+
+<link rel="stylesheet" href="epub.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Git</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Building Reproducible Analytical Pipelines</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/b-rodrigues/rap4mads_2023" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="" title="Download" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-download"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="./Building-Reproducible-Analytical-Pipelines.pdf">
+            <i class="bi bi-bi-file-pdf pe-1"></i>
+          Download PDF
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="./Building-Reproducible-Analytical-Pipelines.epub">
+            <i class="bi bi-bi-journal pe-1"></i>
+          Download ePub
+          </a>
+        </li>
+    </ul>
+    <a href="" title="Share" id="sidebar-tool-dropdown-1" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-1">
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+            <i class="bi bi-bi-twitter pe-1"></i>
+          Twitter
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+            <i class="bi bi-bi-facebook pe-1"></i>
+          Facebook
+          </a>
+        </li>
+    </ul>
+  <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-intro_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-functional-programming.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A primer on functional programming</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-git.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Git</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">3.1</span> Introduction</a></li>
+  <li><a href="#installing-git" id="toc-installing-git" class="nav-link" data-scroll-target="#installing-git"><span class="header-section-number">3.2</span> Installing Git</a></li>
+  <li><a href="#setting-up-a-repo" id="toc-setting-up-a-repo" class="nav-link" data-scroll-target="#setting-up-a-repo"><span class="header-section-number">3.3</span> Setting up a repo</a></li>
+  <li><a href="#cloning-the-repository-onto-your-computer" id="toc-cloning-the-repository-onto-your-computer" class="nav-link" data-scroll-target="#cloning-the-repository-onto-your-computer"><span class="header-section-number">3.4</span> Cloning the repository onto your computer</a></li>
+  <li><a href="#your-first-commit" id="toc-your-first-commit" class="nav-link" data-scroll-target="#your-first-commit"><span class="header-section-number">3.5</span> Your first commit</a></li>
+  <li><a href="#collaborating" id="toc-collaborating" class="nav-link" data-scroll-target="#collaborating"><span class="header-section-number">3.6</span> Collaborating</a></li>
+  <li><a href="#branches" id="toc-branches" class="nav-link" data-scroll-target="#branches"><span class="header-section-number">3.7</span> Branches</a></li>
+  <li><a href="#contributing-to-someone-elses-repository" id="toc-contributing-to-someone-elses-repository" class="nav-link" data-scroll-target="#contributing-to-someone-elses-repository"><span class="header-section-number">3.8</span> Contributing to someone else’s repository</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/b-rodrigues/rap4mads_2023/edit/main/04-git.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Git</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/git_header.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>What you’ll have learned by the end of the chapter: basics of working alone, and collaboration, using Git.</p>
+<section id="introduction" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">3.1</span> Introduction</h2>
+<p>Git is a software for version control. Version control is absolutely essential in software engineering, or when setting up a RAP. If you don’t install a version control system such as Git, don’t even start trying to set up a RAP. But what does a version control system like Git actually do? The basic workflow of Git is as follows: you start by setting up a repository for a project. On your computer, this is nothing more than a folder with your scripts in it. However, if you’re using Git to keep track of what’s inside that folder, there will be a hidden <code>.git</code> folder with a bunch of files in it. You can forget about that folder, this is for Git’s own internal needs. What matters, is that when you make changes to your files, you can first <em>commit</em> these changes, and then push them back to a repository. Collaborators can copy this repository and synchronize their files saved on their computers with your changes. Your collaborators can then also work on the files, then commit and push the changes to the repository as well.</p>
+<p>You can then pull back these changes onto your computer, add more code, commit, push, etc… Git makes it easy to collaborate on projects either with other people, or with future you. It is possible to roll back to previous versions of your code base, you can create new branches of your project to test new features (without affecting the main branch of your code), collaborators can submit patches that you can review and merge, and and and…</p>
+<p>In my experience, learning git is one of the most difficult things there is for students. And this is because Git solves a complex problem, and there is no easy way to solve a complex problem. But I would however say that Git is not unnescessarily complex. So buckle up, because this chapter is not going to be easy.</p>
+<p>Git is incredibly powerful, and absolutely essential in our line of work, it is simply not p ossible to not know at least some basics of Git. And this is what we’re going to do, learn the basics, it’ll keep us plenty busy already.</p>
+<p>But for now, let’s pause for a brief moment and watch <a href="https://www.youtube.com/watch?v=2ReR1YJrNOM">this video</a> that explains in 2 minutes the general idea of Git.</p>
+<p>Let’s get started.</p>
+<p>You might have heard of <a href="https://github.com">github.com</a>: this is a website that allows programmers to set up repositories on which they can host their code. The way to interact with github.com is via Git; but there are many other website like github.com, such as <a href="https://gitlab.com">gitlab.com</a> and <a href="https://bitbucket.com">bitbucket.com</a>.</p>
+<p>For this course, you should create an account on <a href="https://github.com">github.com</a>. This should be easy enough. Then you should install Git on your computer.</p>
+</section>
+<section id="installing-git" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="installing-git"><span class="header-section-number">3.2</span> Installing Git</h2>
+<p>Installing Git is not hard; it installs like any piece of software on your computer. If you’re running a Linux distribution, chances are you already have Git installed. To check if it’s already installed on a Linux system, open a terminal and type <code>which git</code>. If a path gets returned, like <code>usr/bin/gin</code>, congratulations, it’s installed, if the command returns nothing you’ll have to install it. On Ubuntu, type <code>sudo apt-get install git</code> and just wait a bit. If you’re using macOS or Windows, you will need to install it manually. For Windows, download the installer from <a href="https://gitforwindows.org/">here</a>, and for macOS from <a href="https://git-scm.com/download/mac">here</a>; you’ll see that there are several ways of installing it on macOS, if you’ve never heard of homebrew or macports then install the binary package from <a href="here">https://sourceforge.net/projects/git-osx-installer/</a>.</p>
+</section>
+<section id="setting-up-a-repo" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="setting-up-a-repo"><span class="header-section-number">3.3</span> Setting up a repo</h2>
+<p>Ok so now that Git is installed, we can actually start using it. First, let’s start by creating a new repository on github.com. As I’ve mentioned in the introductory paragraph, Git will allow you to interact with github.com, and you’ll see in what ways soon enough. For now, login to your github.com account, and create a new repository by clicking on the ‘plus’ sign in the top right corner of your profile page and then choose ‘New repository’:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_1.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>In the next screen, choose a nice name for your repository and ignore the other options, they’re not important for now. Then click on ‘Create repository’:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_2.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Ok, we’re almost done with the easy part. The next screen tells us we can start interacting with the repository. For this, we’re first going to click on ‘README’:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_3.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>This will add a <code>README</code> file that we can also edit from github.com directly:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_4.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Add some lines to the file, and then click on ‘Commit new file’. You’ll end up on the main page of your freshly created repository. We are now done with setting up the repository on github.com. We can now <em>clone</em> the repository onto our machines. For this, click on ‘Code’, then ‘SSH’ and then on the copy icon:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_5.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Now, to make things easier on you, we’re going to use Rstudio as an interface for Git. But you should know that Git can be used independently from a terminal application on Linux or macOS, or from Git Bash on Windows, and you should definitely get familiar with the Linux/macOS command line at some point if you wish to become a data scientist. This is because most servers, if not all, that you are going to interact with in your career are running some flavour of Linux. But since the Linux command line is outside the scope of this course, we’ll use Rstudio instead (well, we’ll use it as much as we can, because at some point it won’t be enough and have to use the terminal instead anyways…).</p>
+</section>
+<section id="cloning-the-repository-onto-your-computer" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="cloning-the-repository-onto-your-computer"><span class="header-section-number">3.4</span> Cloning the repository onto your computer</h2>
+<p>Start Rstudio and click on ‘new project’ and then ‘Version Control’:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_6.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Then choose ‘Git’:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_7.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Then paste the link from before into the ‘Repository URL’ field, the ‘project directory name’ will fill out automatically, choose where to save the repository in your computer, click on ‘Open in new session’ and then on ‘Create Project’:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_8.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>A new Rstudio window should open. There are several things that you should pay attention to now:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_9.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Icon (1) indicates that this project is <em>git-enabled</em> so to speak. (2) shows you that Rstudio is open inside the <code>example_repo</code> (or whatever you named your repo to) project, and (3) shows you the actual repository that was downloaded from github.com at the path you chose before. You will also see the <code>README</code> file that we created before.</p>
+</section>
+<section id="your-first-commit" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="your-first-commit"><span class="header-section-number">3.5</span> Your first commit</h2>
+<p>Let’s now create a simple script and add some lines of code to it, and save it. Check out the <code>Git</code> tab now, you should see your script there, alongside a <code>?</code> icon:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_10.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>We are now ready to commit the file, but first let’s check out what actually changed. If you click on <code>Diff</code>, a new window will open with the different files that changed since last time:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_11.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Icon (1) shows you the list of files that changed. We only created the file called <code>my_script.R</code>, but two other files are listed as well. These files are automatically generated when starting a new project. <code>.gitignore</code> lists files and folders that Git should not track, meaning, any change that will affect these files will be ignored by Git. This means that these files will also not be uploaded to github.com when committing. The file ending with the <code>.Rproj</code> extension is a RStudio specific file, which simply defines some variables that help RStudio start your project. What matters here is that the files you changed are listed, and that you saved them. You can double check that you actually correctly saved your files by looking at (2), which lists the lines that were added (added lines will be highlighted in green, deleted lines in red). In (3) you can write a commit message. This message should be informative enough that a coworker, or future you, can read through them and have a rough idea of what changed. Best practice is to commit often and early, and try to have one commit per change (per file for example, or per function within that file) that you make. Let’s write something like: “Started project: first graph done” as the commit message. We’re almost done: now let’s stage the files for this commit. This means that we can choose which files should actually be included in this commit. You can only stage one file, several files, or all files. Since this is our first commit, let’s stage everything we’ve got, by simply clicking on the checkboxes below the column <code>Staged</code> in (1).</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_12.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>The status of the files now changed: they’ve been added for this commit. We can now click on the <code>Commit</code> button. Now these changes have been committed there are no unstaged files anymore. We have two options at this point: we can continue working, and then do another commit, or we can push our changes to github.com. Committing without pushing does not make our changes available to our colleagues, but because we committed them, we can recover our changes. For example, if I continue working on my file and remove some lines by mistake, I can recover them (I’ll show you how to do this later on). But it is a much better idea to push our commit now. This makes our changes available to colleagues (who need to pull the changes from github.com) and should our computer spontaneously combust, at least or work is now securely saved on github.com. So let’s <code>Push</code>:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_13.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Ooooooops! Something’s wrong! Apparently, we do not have access rights to the repo? This can sound weird, because after all, we created the repo with our account and then cloned it. So what’s going on? Well, remember that anyone can clone a public repository, but only authorized people can push changes to it. So at this stage, the Git software (that we’re using through RStudio) has no clue who you are. Git simply doesn’t know that your the <em>admin</em> of the repository. You need to provide a way for Git to know by logging in. And the way you login is through a so-called ssh key.</p>
+<p>Now if you thought that Git was confusing, I’m sorry to say that what’s coming confuses students in general even more. Ok so what’s a ssh key, and why does Git need it? <em>An</em> ssh key is actually a misnomer, because we should really be talking about a pair of keys. The idea is that you generated two files on the computer that you need to access github.com from. One of these keys will be a public key, the other a private key. The private key will be a file usually called <code>id_rsa</code> without any extension, while the public key will be called the same, but with a <code>.pub</code> extension, so <code>id_rsa.pub</code> (we will generate these two files using RStudio in a bit). What you do is that you give the public key to github.com, but you keep your private key on your machine. Never, ever, upload or share your private key with anyone! It’s called private for a reason. Once github.com has your public key, each time you want to push to github.com, what happens is that the public key is checked against your private key. If they match, github.com knows that you are the person you claim to be, and will allow you to push to the repository. If not you will get the error from before.</p>
+<p>So let’s now generate an ssh key pair. For this, go to <code>Tools &gt; Global Options &gt; Git/Svn</code>, and then click on the <code>Create RSA Key...</code></p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_14.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Icon (1) shows you the path where the keys will be saved. This is only useful if you have reasons to worry that your private key might be compromised, but without physical access to your machine, an attacker would have a lot of trouble retrieving it (if you keep your OS updated…). Finally click on <code>Create</code>:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_15.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Ok so now that you have generated these keys, let’s copy the public key in our clipboard (because we need to paste the key into github.com). You should be able to find this key from RStudio. Go back to <code>Tools &gt; Global Options &gt; Git/Svn</code>, and then click on <code>View public key</code>:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_18.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>A new window will open showing you your public key. You can now copy and paste it into github.com. For this, first go to your profile, then <code>Settings</code> then <code>SSH and GPG keys</code>:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_16.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Then, on the new screen click on <code>New SSH key</code>:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_17.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>You can now add your key. Add a title, for example <code>home</code> for your home computer, or <code>work</code> for your work laptop. Paste the key from RStudio into the field (2), and then click on <code>Add SSH key</code>:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_19.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Ok, now that github.com has your public key, you can now push your commits without any error. Go back to RStudio, to the <code>Git</code> tab and click on <code>Push</code>:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_20.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>A new window will open, this time showing you that the upload went through:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_21.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>You will need to add one public key per computer you use on github.com. In the past, it was possible to push your commits by providing a password each time. This was not secure enough however, so now the only way to to push commits is via ssh key pairs. This concept is quite important: whatever service you use, even if your company has a private Git server instance, you will need to provide the public key to the central server. All of this ssh key pair business IS NOT specific to github.com, so make sure that you understand this well, because sooner rather later, you will need to provide another public key, either because you work from several computers or because the your first job will have it’s own Git instance.</p>
+<p>Ok so now you have an account on github.com, and know how to set up a repo and push code to it. This is already quite useful, because it allows you and future you to collaborate. What I mean by this is that if in two or three months you need to go back to some previous version of your code this is now possible. Let’s try it out; change the file by adding some lines to it, commit your changes and push again. Remember to use a commit message that explain what you did. Once you’re done, go back to the <code>Git</code> tab of Rstudio, and click on the <code>History</code> button (the icon is a clock):</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_22.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>As you can see from the picture above, clicking on <code>History</code> shows every commit since the beginning of the repo. It also shows you who pushed that particular commit, and when. For now, you will only see your name. At (1) you see the lines I’ve added. These are reflected, in green, in the <code>History</code> window. If I had removed some lines, these would have been highlighted in red in the same window. (4) shows you the only commit history. There’s not much for now, but for projects that have been ongoing for some time, this can get quite long! Finally, (5) shows many interesting details. As before, who pushed the commit, when, the commit message (under <strong>Subject</strong>), and finally the <strong>SHA</strong>. This is a unique sequence of characters that identifies the commit. If you select another commit, you will notice that its SHA is different:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_23.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>The SHA identifier (called a <em>hash</em>) is what we’re going to use to revert to a previous state of the code base. But because this is a bit advanced, there is no way of doing it from RStudio. You will need to open a terminal and use Git from there. On Windows, go to the folder of your project, right-click on some white space and select <code>Git Bash Here</code>:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_24.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>A similar approach can be used for most Linux distributions (but simply open a terminal, Git Bash is Windows only), and you can apparently do something similar on macOS, but first need to active the required service as <a href="https://ladedu.com/how-to-open-a-terminal-window-at-any-folder-from-finder-in-macos/#How-to-Open-Mac-Terminal-from-Finder-in-the-Current-Folder">explained here</a>. You can also simply open a terminal and navigate to the right folder using <code>cd</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Once the terminal is opened, follow along but by adapting the paths to your computer:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The first line changes the working directory to my github repo on my computer</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If you did not open the terminal inside the folder as explained above, you need</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># adapt the path.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/six_to/example_repo  <span class="co"># example_repo is the folder where I cloned the repo</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="co"># List all the files in the directory</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>example_repo.Rproj
+my_script.R
+new_script.R
+README.md</code></pre>
+</div>
+</div>
+<p>Listing the files inside the folder confirms that I’m in the right spot. Something else you could do here is try out some git commands, for example, <code>git log</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>## commit bd7daf0dafb12c0a19ba65f85b54834a02f7d150
+## Author: Bruno Rodrigues &lt;bruno@brodrigues.co&gt;
+## Date:   Mon Oct 17 14:38:59 2022 +0200
+## 
+##     added some more lines
+## 
+## commit 95c26ed4dffd8fc40503f25ddc11af7de5c586c0
+## Author: Bruno Rodrigues &lt;bruno@brodrigues.co&gt;
+## Date:   Sat Oct 15 12:52:43 2022 +0200
+## 
+##     Started project: first graph done
+## 
+## commit d9cff70ff71241ed8514cb65d97e669b0bbdf0f6
+## Author: Bruno Rodrigues &lt;brodriguesco@protonmail.com&gt;
+## Date:   Thu Oct 13 22:12:06 2022 +0200
+## 
+##     Create README.md
+</code></pre>
+<p><code>git log</code> returns the same stuff as the <code>History</code> button of the <code>Git</code> pane inside RStudio. You see the commit hash, the name of the author and when the commit was pushed. At this stage, we have two options. We could “go back in time”, but just look around, and then go back to where the repository stands currently. Or we could essentially go back in time, and stay there, meaning, we actually revert the code base back. Let’s try the first option, let’s just take a look around at the code base at a particular point in time. Copy the hash of a previous commit. With the hash in your clipboard, use the <code>git checkout</code> command to go back to this commit:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout 95c26ed4dffd8f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You will see an output similar to this:</p>
+<pre><code>Note: switching to '95c26ed4dffd8f'.
+
+You are in 'detached HEAD' state. You can look around, make experimental changes
+and commit them, and you can discard any commits you make in this state without
+impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may do so
+(now or later) by using -c with the switch command. Example:
+
+  git switch -c &lt;new-branch-name&gt;
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 95c26ed Started project: first graph done
+</code></pre>
+<p>When checking out a commit, you are in <em>detached HEAD</em> state. I won’t go into specifics, but what this means is that anything you do here, won’t get saved, unless you specifically create a new branch for it. A Git repository is composed of branches. The branche you’re currently working on should be called <em>main</em> or <em>master</em>. You can create new branches, and continue working on these other branches, without affecting the <em>master</em> branch. This allows to explore new ideas and experiment. If this turns out to be fruitful, you can merge the experimental branch back into <em>master</em>. We are not going to explore branches in this course, so you’ll have to read about it on your own. But don’t worry, branches are not that difficult to grok.</p>
+<p>Take a look at the script file now, you will see that the lines you added are now missing (the following line only works on Linux, macOS, or inside a Git Bash terminal on Windows. <code>cat</code> is a command line program that prints the contents of a text file to a terminal):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> my_script.R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once you’re done taking your tour, go back to the main (or master) branch by running:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ok, so how do we actually go back to a previous state? For this, use <code>git revert</code>. But unlike <code>git checkout</code>, you don’t use the hash of the commit you want to go back to. Instead, you need to use the hash of the commit you want to “cancel”. For example, imagine that my commit history looks like this:</p>
+<pre><code>## commit bd7daf0dafb12c0a19ba65f85b54834a02f7d150
+## Author: Bruno Rodrigues &lt;bruno@brodrigues.co&gt;
+## Date:   Mon Oct 17 14:38:59 2022 +0200
+## 
+##     added some more lines
+## 
+## commit 95c26ed4dffd8fc40503f25ddc11af7de5c586c0
+## Author: Bruno Rodrigues &lt;bruno@brodrigues.co&gt;
+## Date:   Sat Oct 15 12:52:43 2022 +0200
+## 
+##     Started project: first graph done
+## 
+## commit d9cff70ff71241ed8514cb65d97e669b0bbdf0f6
+## Author: Bruno Rodrigues &lt;brodriguesco@protonmail.com&gt;
+## Date:   Thu Oct 13 22:12:06 2022 +0200
+## 
+##     Create README.md
+</code></pre>
+<p>and let’s suppose I want to go back to commit <code>95c26ed4dffd8fc</code> (so my second commit). What I need to do is essentially cancel commit <code>bd7daf0dafb1</code>, which comes after commit <code>95c26ed4dffd8fc</code> (look at the dates: commit <code>95c26ed4dffd8fc</code> was made on October 15th and commit <code>bd7daf0dafb1</code> was made on October 17th). So I need to revert commit <code>bd7daf0dafb1</code>. And that’s what we’re going to do:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> revert bd7daf0dafb1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This opens a text editor inside your terminal. Here you can add a commit message or just keep the one that was added by default. Let’s just keep it and quit the text editor. Unfortunately, this is not very use friendly, but to quit the editor type <code>:q</code>. (The editor that was opened is vim, a very powerful terminal editor, but with a very steep learning curve.) Now you’re back inside your terminal. Type <code>git log</code> and you will see a new commit (that you have yet to push), which essentially cancels the commit <code>bd7daf0dafb1</code>. You can now push this; for pushing this one, let’s stay inside the terminal and use the following command:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>origin main</code>: <code>origin</code> here refers to the remote repository, so to github.com, and <code>main</code> to the main branch.</p>
+<p>Ok, we’re doing with the basics. Let’s now see how we can contribute to some repository.</p>
+</section>
+<section id="collaborating" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="collaborating"><span class="header-section-number">3.6</span> Collaborating</h2>
+<p>Github (and similar services) allow you to collaborate with people. There are two ways of achieving this. You can invite people to work with you on the same project, by giving them writing rights to the repository. This is what we are going to cover in this section. The other way to collaborate is to let strangers fork your repository (make a copy of it on github.com); they can then work on their copy of the project independently from you. If they want to submit patches to you, they can do so by doing a so-called <em>pull request</em>. This workflow is quite different from what we’ll see here and will be discussed in the next section.</p>
+<p>So for this section you will need to form teams of at least 2 people. One of you will invite the other to collaborate by going on github.com and then following the instructions in the picture below:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_25.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Type the username of your colleague to find him/her. In my case I’m inviting my good friend David Solito:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_26.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>David now essentially owns the repository as well! So he can contribute to it, just like me. Now, let’s suppose that I continue working on my end, and don’t coordinate with David. After all, this is a post-covid world, so David might be working asynchronously from home, and maybe he lives in an entire different time zone completely! What’s important to realize, is that unlike other ways of collaborating online (for example with an office suite), you do not need to coordinate to collaborate with Git.</p>
+<p>The file should look like this (yours might be different, it doesn’t matter):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtcars<span class="sc">$</span>mpg, mtcars<span class="sc">$</span>hp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I’m going to change it to this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mtcars) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> hp, <span class="at">x =</span> mpg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="04-git_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The only thing I did was change from the base plotting functions to <code>{ggplot2}</code>. Since you guys formed groups, please work independently on the repository. Go crazy, change some lines, add lines, remove lines, or add new files with new things. Just work as normal, and commit and push your changes and see what happens.</p>
+<p>So let’s commit and push. You can do it from RStudio or from the command line/Git Bash. This is what I’ll be doing from now on, but feel free to continue using Git through RStudio:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add . <span class="co"># This adds every file I've changed to this next commit</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-am</span> <span class="st">"Remade plot with ggplot2"</span> <span class="co"># git commit is the command to create the commit. The -am flag means: 'a' stands for all, as in 'adding all files to the commit', so it's actually redundant with the previous line, but I use it out of habit, and 'm' specifies that we want to add a message</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin main <span class="co"># This pushes the commit to the repository on github.com</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And this is what happens:</p>
+<pre><code>➤ git push origin main
+
+   To github.com:b-rodrigues/example_repo.git
+    ! [rejected]        main -&gt; main (fetch first)
+   error: failed to push some refs to 'github.com:b-rodrigues/example_repo.git'
+   hint: Updates were rejected because the remote contains work that you do
+   hint: not have locally. This is usually caused by another repository pushing
+   hint: to the same ref. You may want to first integrate the remote changes
+   hint: (e.g., 'git pull ...') before pushing again.
+   hint: See the 'Note about fast-forwards' in 'git push --help' for details.</code></pre>
+<p>What this all means is that David already pushed some changes while I was working on the project as well. It says so very cleary <em>Updates were rejected because the remote contains work that you do not have locally.</em> Git tells us that we first need to pull (download, if you will) the changes to our own computer to integrate the changes, and then we can push again.</p>
+<p>At this point, if we want, we can first go to github.com and see the commit history there to see what David did. Go to your repo, and click on the commit history icon:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_27.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Doing so will list the commit history, as currently on github.com:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_28.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>While I was working, David pushed 2 commits to the repository. If you compare to your local history, using <code>git log</code> you will see that these commits are not there, but instead, however many commits you did (this will not be the case for all of you; whoever of you pushed first will not see any difference between the local and remote repository). Let’s see how it looks for me:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>commit d2ab909fc679a5661fc3c49c7ac549a2764c539e (HEAD -&gt; main)
+Author: Bruno Rodrigues &lt;bruno@brodrigues.co&gt;
+Date:   Tue Oct 18 09:28:10 2022 +0200
+
+    Remade plot with ggplot2
+
+commit e66c68cc8b58831004d1c9433b2223503d718e1c (origin/main, origin/HEAD)
+Author: Bruno Rodrigues &lt;bruno@brodrigues.co&gt;
+Date:   Mon Oct 17 17:33:33 2022 +0200
+
+    Revert "added some more lines"
+    
+    This reverts commit bd7daf0dafb12c0a19ba65f85b54834a02f7d150.
+
+commit bd7daf0dafb12c0a19ba65f85b54834a02f7d150
+Author: Bruno Rodrigues &lt;bruno@brodrigues.co&gt;
+Date:   Mon Oct 17 14:38:59 2022 +0200
+
+    added some more lines
+
+commit 95c26ed4dffd8fc40503f25ddc11af7de5c586c0
+Author: Bruno Rodrigues &lt;bruno@brodrigues.co&gt;
+Date:   Sat Oct 15 12:52:43 2022 +0200
+
+    Started project: first graph done
+
+commit d9cff70ff71241ed8514cb65d97e669b0bbdf0f6
+Author: Bruno Rodrigues &lt;brodriguesco@protonmail.com&gt;
+Date:   Thu Oct 13 22:12:06 2022 +0200
+
+    Create README.md
+
+</code></pre>
+<p>Yep, so none of David’s commits in sight. Let me do what Git told me to do: let’s pull, or download, David’s commits locally:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull <span class="at">--rebase</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>--rebase</code> is a flag that keeps the commit history linear. There are many different ways you can pull changes, but for our purposes we can focus on <code>--rebase</code>. The other strategies are more advanced, and you might want at some point to take a look at them.</p>
+<p>Once <code>git pull --rebase</code> is done, we get the following message:</p>
+<pre><code>Auto-merging my_script.R
+CONFLICT (content): Merge conflict in my_script.R
+error: could not apply d2ab909... Remade plot with ggplot2
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm &lt;conflicted_files&gt;", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply d2ab909... Remade plot with ggplot2
+</code></pre>
+<p>Once again, it is important to read what Git is telling us. There is a merge conflict in the <code>my_script.R</code> file. Let’s open it, and see what’s going on:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_29.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>We can see two things: the lines that David changed in (1), and the lines I’ve added in (2). This happened because we changed the same lines. Had I added lines instead of changing lines that were already there, the merge would have happened automatically, because there would not have been any conflict. In this case however, Git does not know how to solve the issue: do we keep David’s changes, or mine? Actually, we need to keep both. I’ll keep my version of plot that uses <code>{ggplot2}</code>, but will also keep what David added: he replaced the <code>hp</code> variable by <code>cyl</code>, and added a linear regression as well. Since this seems sensible to me, I will adapt the script in a way that gracefully merges both contributions. So the file looks like this now:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_30.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>We can now save, and continue following the hints from Git, namely, adding the changed file to the next commit and then use <code>git rebase --continue</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add my_script.R</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> rebase <span class="at">--continue</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will once again open the editor in your terminal. Simply close it with <code>:q</code>. Let’s now push:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and we’re done! Let’s go back to github.com to see the commit history. You can click on the hash to see the details of how the file changed (you can do so from RStudio as well):</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_31.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>In green, you see lines that were added, and in red, lines that were removed. The lines where the linear model was defined are not impacted, because David wrote them at the bottom of the script, and I did not write anything there:</p>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_32.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="branches" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="branches"><span class="header-section-number">3.7</span> Branches</h2>
+<p>It is possible to create new branches and continue working on these branches without impacting the code in the main branch. This is useful if you want to experiment and explore new ideas. The <code>main</code> or <code>master</code> branch can thus be used only to have code that is ready to get shipped and distributed, while you can keep working on a development branch. Let’s create a branch called <code>dev</code> by using the <code>git checkout</code> command, and let’s also add the <code>-b</code> flag to immediately switch to it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git checkout <span class="at">-b</span> dev </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Switched</span> to a new branch <span class="st">'dev'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It is possible to list the existing branches using <code>git branch</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git branch</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> dev</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">main</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As a little aside, if you’re working inside a terminal instead of RStudio or another GUI application, it might be a good idea to configure your terminal a little bit to do two things:</p>
+<ul>
+<li>change the branch you’re currently on</li>
+<li>show if some files got changed.</li>
+</ul>
+<p>If you want to keep it simple, following <a href="https://thucnc.medium.com/how-to-show-current-git-branch-with-colors-in-bash-prompt-380d05a24745">this tutorial</a> should be enough. If you want something more fancy, use <a href="https://www.pragmaticlinux.com/2022/06/show-the-git-branch-in-your-bash-terminal-prompt/">this other tutorial</a>. I have not followed either, so I don’t know if they work, but by the looks of it they should, and it should work on both Linux and macOS I believe. If these don’t work, just google for “showing git branch in terminal”. This is entirely optional, and you can use <code>git branch</code> to check which branch you’re currently working on.</p>
+<p>Ok so now that we are on the <code>dev</code> branch, let’s change the files a little bit. Change some lines, then commit, then add some new files and commit again. Then push to <code>dev</code> using:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git push origin dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is what you should see on github.com after all is done:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/github_33.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The video below shows you how you can switch between branches and check the commit history of both:</p>
+<div style="text-align:center;">
+<p><video width="640" height="480" controls=""> <source src="img/github_branches.mp4" type="video/mp4"> </video></p>
+</div>
+<p>Let’s suppose that we are happy with our experiments on the <code>dev</code> branch, and are ready to add them to the <code>master</code> or <code>main</code> branch. For this, checkout the main branch:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git checkout main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can now pull from <code>dev</code>. This will update your local <code>main</code> branch with the changes from <code>dev</code>. Depending on what changes you introduced, you might need to solve some conflicts. Try to use the <code>rebase</code> strategy, and then solve the conflict. In my case, the merge didn’t cause an issue:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git pull origin dev</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">From</span> github.com:b-rodrigues/example_repo</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">*</span> branch            dev        <span class="at">-</span><span class="op">&gt;</span> FETCH_HEAD</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Updating</span> a9a417f..8b2f04f</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Fast-forward</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">my_script.R</span>  <span class="kw">|</span> <span class="ex">8</span> +++-----</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">new_script.R</span> <span class="kw">|</span> <span class="ex">1</span> +</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a> <span class="ex">2</span> files changed, 4 insertions<span class="er">(</span><span class="ex">+</span><span class="kw">)</span><span class="ex">,</span> 5 deletions<span class="er">(</span><span class="ex">-</span><span class="kw">)</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a> <span class="ex">create</span> mode 100644 new_script.R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now if you run git status, this is what you’ll see:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git status</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">On</span> branch main</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Your</span> branch and <span class="st">'origin/main'</span> have diverged,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="ex">and</span> have 2 and 2 different commits each, respectively.</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git pull"</span> to merge the remote branch into yours<span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, remember that I’ve pulled from <code>dev</code> into <code>main</code>. But <code>git status</code> complains that the remote <code>main</code> and local <code>main</code> branches have diverged. In these situations, git suggests to pull. This time we’re pulling from <code>main</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git pull</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will likely result in the following message:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> You have divergent branches and need to specify how to reconcile them.</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> You can do so by running one of the following commands sometime before</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> your next pull:</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span>   git config pull.rebase false  <span class="co"># merge</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span>   git config pull.rebase true   <span class="co"># rebase</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span>   git config pull.ff only       <span class="co"># fast-forward only</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> You can replace <span class="st">"git config"</span> with <span class="st">"git config --global"</span> to set a default</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> preference for all repositories. You can also pass <span class="at">--rebase,</span> <span class="at">--no-rebase,</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> or <span class="at">--ff-only</span> on the command line to override the configured default per</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> invocation.</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="ex">fatal:</span> Need to specify how to reconcile divergent branches.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Because there are conflicts, I need to specify how the pulling should be done. For this, I’m using once again the <code>rebase</code> flag:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git pull <span class="at">--rebase</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Auto-merging</span> my_script.R</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="ex">CONFLICT</span> <span class="er">(</span><span class="ex">content</span><span class="kw">)</span><span class="bu">:</span> Merge conflict in my_script.R</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="ex">error:</span> could not apply b240566... lm <span class="at">-</span><span class="op">&gt;</span> rf</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> Resolve all conflicts manually, mark them as resolved with</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> <span class="st">"git add/rm &lt;conflicted_files&gt;"</span>, then run <span class="st">"git rebase --continue"</span>.</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> You can instead skip this commit: run <span class="st">"git rebase --skip"</span>.</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="ex">hint:</span> To abort and get back to the state before <span class="st">"git rebase"</span>, run <span class="st">"git rebase --abort"</span>.</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Could</span> not apply b240566... lm <span class="at">-</span><span class="op">&gt;</span> rf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So now I have conflicts. This is how the <code>my_script.R</code> file looks like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mtcars) <span class="sc">+</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> cyl, <span class="at">x =</span> mpg))</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(hp <span class="sc">~</span> mpg, <span class="at">data =</span> mtcars)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;</span><span class="er">&lt;&lt;&lt;&lt;&lt;&lt;</span> HEAD</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(iris)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(iris)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">=====</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rf)</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span><span class="er">&gt;&gt;&gt;&gt;&gt;&gt;</span> <span class="fu">b240566</span> (lm <span class="ot">-&gt;</span> rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I need to solve the conflicts, and will do so by keeping the following lines:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mtcars) <span class="sc">+</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> cyl, <span class="at">x =</span> mpg))</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(hp <span class="sc">~</span> mpg, <span class="at">data =</span> mtcars)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s save the script, and call <code>git rebase --continue</code>. You might see something like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git rebase <span class="at">--continue</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[detached</span> HEAD 929f4ab] lm <span class="at">-</span><span class="op">&gt;</span> rf</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span> file changed, 4 insertions<span class="er">(</span><span class="ex">+</span><span class="kw">)</span><span class="ex">,</span> 9 deletions<span class="er">(</span><span class="ex">-</span><span class="kw">)</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Auto-merging</span> new_script.R</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="ex">CONFLICT</span> <span class="er">(</span><span class="ex">add/add</span><span class="kw">)</span><span class="bu">:</span> Merge conflict in new_script.R</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="ex">error:</span> could not apply 8b2f04f... new file</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There’s another conflict: this time, this is because of the commit <code>8b2f04f</code>, where I added a new file. This one is easy to solve: I simply want to keep this file, so I simply keep track of it with <code>git add new_script.R</code> and then, once again, call <code>git rebase --continue</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git rebase <span class="at">--continue</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[detached</span> HEAD 20c04f8] new file</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span> file changed, 4 insertions<span class="er">(</span><span class="ex">+</span><span class="kw">)</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Successfully</span> rebased and updated refs/heads/main.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I’m now done and can push to main:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git push origin main</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Enumerating</span> objects: 9, done.</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Counting</span> objects: 100% <span class="er">(</span><span class="ex">9/9</span><span class="kw">)</span><span class="ex">,</span> done.</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Delta</span> compression using up to 12 threads</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Compressing</span> objects: 100% <span class="er">(</span><span class="ex">6/6</span><span class="kw">)</span><span class="ex">,</span> done.</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Writing</span> objects: 100% <span class="er">(</span><span class="ex">6/6</span><span class="kw">)</span><span class="ex">,</span> 660 bytes <span class="kw">|</span> <span class="ex">660.00</span> KiB/s, done.</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Total</span> 6 <span class="er">(</span><span class="ex">delta</span> 2<span class="kw">)</span><span class="ex">,</span> reused 0 <span class="er">(</span><span class="ex">delta</span> 0<span class="kw">)</span><span class="ex">,</span> pack-reused 0</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="ex">remote:</span> Resolving deltas: 100% <span class="er">(</span><span class="ex">2/2</span><span class="kw">)</span><span class="ex">,</span> completed with 1 local object.</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="ex">To</span> github.com:b-rodrigues/example_repo.git</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>   <span class="ex">83691c2..20c04f8</span>  main <span class="at">-</span><span class="op">&gt;</span> main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are other ways to achieve this. So let’s go back to <code>dev</code> and continue working:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git checkout dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Add some lines to <code>my_script.R</code> and then commit and push:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git add .</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git commit <span class="at">-am</span> <span class="st">"more models"</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[dev</span> a0fa9fa] more models</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span> file changed, 4 insertions<span class="er">(</span><span class="ex">+</span><span class="kw">)</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git push origin dev</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Enumerating</span> objects: 5, done.</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Counting</span> objects: 100% <span class="er">(</span><span class="ex">5/5</span><span class="kw">)</span><span class="ex">,</span> done.</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Delta</span> compression using up to 12 threads</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Compressing</span> objects: 100% <span class="er">(</span><span class="ex">3/3</span><span class="kw">)</span><span class="ex">,</span> done.</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Writing</span> objects: 100% <span class="er">(</span><span class="ex">3/3</span><span class="kw">)</span><span class="ex">,</span> 329 bytes <span class="kw">|</span> <span class="ex">329.00</span> KiB/s, done.</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Total</span> 3 <span class="er">(</span><span class="ex">delta</span> 2<span class="kw">)</span><span class="ex">,</span> reused 0 <span class="er">(</span><span class="ex">delta</span> 0<span class="kw">)</span><span class="ex">,</span> pack-reused 0</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="ex">remote:</span> Resolving deltas: 100% <span class="er">(</span><span class="ex">2/2</span><span class="kw">)</span><span class="ex">,</span> completed with 2 local objects.</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="ex">To</span> github.com:b-rodrigues/example_repo.git</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">8b2f04f..a0fa9fa</span>  dev <span class="at">-</span><span class="op">&gt;</span> dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s suppose we’re done with adding features to <code>dev</code>. Let’s checkout <code>main</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git checkout main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and now, let’s not pull from <code>dev</code>, but merge:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> git merge dev</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Auto-merging</span> my_script.R</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="ex">CONFLICT</span> <span class="er">(</span><span class="ex">content</span><span class="kw">)</span><span class="bu">:</span> Merge conflict in my_script.R</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Auto-merging</span> new_script.R</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="ex">CONFLICT</span> <span class="er">(</span><span class="ex">add/add</span><span class="kw">)</span><span class="bu">:</span> Merge conflict in new_script.R</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Automatic</span> merge failed<span class="kw">;</span> <span class="ex">fix</span> conflicts and then commit the result.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Some conflicts are in the file. Let’s take a look (because I’m in the terminal, I use <code>cat</code> to print the file to the terminal, but you can open it in RStudio):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➤</span> cat my_script.R </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="ex">library</span><span class="er">(</span><span class="ex">ggplot2</span><span class="kw">)</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="ex">library</span><span class="er">(</span><span class="ex">randomForest</span><span class="kw">)</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="ex">data</span><span class="er">(</span><span class="ex">mtcars</span><span class="kw">)</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ggplot</span><span class="er">(</span><span class="ex">data</span> = mtcars<span class="kw">)</span> <span class="ex">+</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">geom_point</span><span class="er">(</span><span class="ex">aes</span><span class="er">(</span><span class="ex">y</span> = cyl, x = mpg<span class="kw">))</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="ex">rf</span> <span class="op">&lt;</span>- randomForest<span class="er">(</span><span class="ex">hp</span> ~ mpg, data = mtcars<span class="kw">)</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> HEAD</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="ex">plot</span><span class="er">(</span><span class="ex">rf</span><span class="kw">)</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="ex">=======</span></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="ex">plot</span><span class="er">(</span><span class="ex">rf</span><span class="kw">)</span></span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a><span class="ex">rf2</span> <span class="op">&lt;</span>- randomForest<span class="er">(</span><span class="ex">hp</span> ~ mpg + am + cyl, data = mtcars<span class="kw">)</span></span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a><span class="ex">plot</span><span class="er">(</span><span class="ex">rf2</span><span class="kw">)</span></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Looks like I somehow added some newline somewhere and this caused the conflict. This is quite easy to solve, let’s make the script look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mtcars) <span class="sc">+</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> cyl, <span class="at">x =</span> mpg))</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(hp <span class="sc">~</span> mpg, <span class="at">data =</span> mtcars)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rf)</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>rf2 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(hp <span class="sc">~</span> mpg <span class="sc">+</span> am <span class="sc">+</span> cyl, <span class="at">data =</span> mtcars)</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rf2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can now simply commit and push. Merging can be simpler than pulling and rebasing, especially if you exclusively worked on <code>dev</code> and master has not seen any activity.</p>
+</section>
+<section id="contributing-to-someone-elses-repository" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="contributing-to-someone-elses-repository"><span class="header-section-number">3.8</span> Contributing to someone else’s repository</h2>
+<p>It is also possible to contribute to someone else’s repository; by this I mean someone who is not a colleague, and who did not invite you to his or her repository. So this means that you do not have writing rights to the repository and cannot push to it.</p>
+<p>This is outside the scope of this course, but it is crucial that you understand this as well. For this reason, I highly recommend reading this <a href="https://opensource.com/article/19/7/create-pull-request-github">link</a>.</p>
+<p>Ok, so this wraps up this chapter. Git is incredibly feature rich and complex, but as already discussed, it is NOT optional to know about Git in our trade. So now that you have some understanding of how it works, I suggest that you read the manual <a href="https://git-scm.com/book/tr/v2/Git-Basics-Getting-a-Git-Repository">here</a>. W3Schools has a great tutorial <a href="https://www.w3schools.com/git/default.asp?remote=github">as well</a>.</p>
+
+
+</section>
+<aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Remember the introduction to this book, where I discussed everything else that you should know…<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./03-functional-programming.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A primer on functional programming</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
