@@ -4,7 +4,7 @@ This is the 2023 edition of the course. If you’re looking for the 2022 edition
 
 This repository contains the files of the bookdown I use to teach "Reproducible Analytical Pipelines" in the master’s of data science at the University of Luxembourg.
 
-You can find the bookdown [here](https://b-rodrigues.github.io/rap4mads/index.html). 
+You can find the bookdown [here](https://b-rodrigues.github.io/rap4mads_2023/). 
 
 I make a lot of references to my other bookdown, [Modern R with the tidyverse](https://modern-rstats.eu/).
 
