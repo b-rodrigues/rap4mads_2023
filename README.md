@@ -1,4 +1,6 @@
-# Reproducible Analytical Pipelines - Master's of Data Science
+# Reproducible Analytical Pipelines - Master of Data Science
+
+This is the 2023 edition of the course. If you’re looking for the 2022 edition:  https://github.com/b-rodrigues/rap4mads
 
 This repository contains the files of the bookdown I use to teach "Reproducible Analytical Pipelines" in the master’s of data science at the University of Luxembourg.
 
