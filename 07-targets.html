@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Building Reproducible Analytical Pipelines - 6&nbsp; Setting up pipelines with {targets}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+/* The extra [class] is a hack that increases specificity enough to
+   override a similar rule in reveal.js */
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  font-size: inherit;
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./06-unit-tests.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<link rel="shortcut icon" href="img/favicon.ico">
+
+
+<link rel="stylesheet" href="epub.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Setting up pipelines with <code>{targets}</code></span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Building Reproducible Analytical Pipelines</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/b-rodrigues/rap4mads_2023" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="" title="Download" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-download"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="./Building-Reproducible-Analytical-Pipelines.pdf">
+            <i class="bi bi-bi-file-pdf pe-1"></i>
+          Download PDF
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="./Building-Reproducible-Analytical-Pipelines.epub">
+            <i class="bi bi-bi-journal pe-1"></i>
+          Download ePub
+          </a>
+        </li>
+    </ul>
+    <a href="" title="Share" id="sidebar-tool-dropdown-1" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-1">
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+            <i class="bi bi-bi-twitter pe-1"></i>
+          Twitter
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+            <i class="bi bi-bi-facebook pe-1"></i>
+          Facebook
+          </a>
+        </li>
+    </ul>
+  <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-intro_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-functional-programming.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A primer on functional programming</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-git.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Git</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-package-dev.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Package development</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-unit-tests.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Unit tests</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-targets.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Setting up pipelines with <code>{targets}</code></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">6.1</span> Introduction</a></li>
+  <li><a href="#build-automation-with-r" id="toc-build-automation-with-r" class="nav-link" data-scroll-target="#build-automation-with-r"><span class="header-section-number">6.2</span> Build automation with R</a></li>
+  <li><a href="#an-aside-on-renv" id="toc-an-aside-on-renv" class="nav-link" data-scroll-target="#an-aside-on-renv"><span class="header-section-number">6.3</span> An aside on <code>{renv}</code></a></li>
+  <li><a href="#our-actual-first-pipeline" id="toc-our-actual-first-pipeline" class="nav-link" data-scroll-target="#our-actual-first-pipeline"><span class="header-section-number">6.4</span> Our actual first pipeline</a></li>
+  <li><a href="#running-someone-elses-pipeline" id="toc-running-someone-elses-pipeline" class="nav-link" data-scroll-target="#running-someone-elses-pipeline"><span class="header-section-number">6.5</span> Running someone else’s pipeline</a></li>
+  <li><a href="#running-any-code-with-older-packages" id="toc-running-any-code-with-older-packages" class="nav-link" data-scroll-target="#running-any-code-with-older-packages"><span class="header-section-number">6.6</span> Running any code with older packages</a></li>
+  <li><a href="#why-we-need-more" id="toc-why-we-need-more" class="nav-link" data-scroll-target="#why-we-need-more"><span class="header-section-number">6.7</span> Why we need more</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">6.8</span> Further reading</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/b-rodrigues/rap4mads_2023/edit/main/07-targets.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Setting up pipelines with <code>{targets}</code></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/pipeline.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>What you’ll have learned by the end of the chapter: how to set up an (almost) reproducible pipeline.</p>
+<section id="introduction" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">6.1</span> Introduction</h2>
+<p><code>{targets}</code> is a build automation tool for the R programming language. <em>Build</em>, in the context of this course means the creation of a data product. As mentioned in the introduction, this data product can be anything from predictions from a model to interactive web applications. <em>Automation</em> means that this build automation tool will take the burden off our shoulders when it’ll be time to run the build pipeline. Using such a tool, programmers don’t need to think about which parts of the code to rerun if they introduce a change somewhere. Only the parts affected by the change will run. These tools also run the pipeline in parallel, because they identify independent parts of the pipeline which are then run simultaneously. Build automation tools have many benefits, and because they work in a certain way, they also force you to work in a more structured way.</p>
+</section>
+<section id="build-automation-with-r" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="build-automation-with-r"><span class="header-section-number">6.2</span> Build automation with R</h2>
+<p>As an introduction, there really is not a better source than the <code>{targets}</code> manual itself, and in particular the <a href="https://books.ropensci.org/targets/walkthrough.html">walkthrough section</a>. After reading this section, we have the basic knowledge to build our first pipeline. The goal of this pipeline will be to simply create a plot using the unemployment data we’ve been working on. Let’s create a new project in RStudio, but make sure that you check the following boxes:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/pipeline_1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>You should see the following message in the R console:</p>
+<pre><code>* Initializing project ...
+* Discovering package dependencies ... Done!
+* Copying packages into the cache ... Done!
+The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- renv   [* -&gt; 0.16.0]
+
+The version of R recorded in the lockfile will be updated:
+- R      [*] -&gt; [4.2.1]
+
+* Lockfile written to '~/six_to/first_pipeline/renv.lock'.</code></pre>
+<p>This is something that we have not discussed yet, so before we move on, let’s have a little aside on what <code>{renv}</code> is.</p>
+</section>
+<section id="an-aside-on-renv" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="an-aside-on-renv"><span class="header-section-number">6.3</span> An aside on <code>{renv}</code></h2>
+<p>Whether they’re simple scripts to analyze some data or more complex reproducible analytical pipelines, all of your projects depend on the packages that you use for the analysis. And these packages evolve and change. It can very well happen that a function that you use from package <code>{xyz}</code> version 1 won’t be available anymore in version 2. Or maybe it’s still available but it works slightly differently. It can be something as trivial as the arguments of the function have been renamed. The consequence is that when you’ll try to rerun your code, it won’t work at all, or worse, it’ll work, but produce a result that is not comparable to old results anymore, because the function got changed and the underlying algorithm isn’t the same anymore. So we need a certain stability, and ideally keep reusing the same packages for the same project. If you want to update a project to use new packages version, this can of course also be done, but it has to be conscious choice and you will have to make sure that the updated pipeline (using the updated packages) is able to reproduce old results before putting it into production.</p>
+<p>It must be noted however that in my experience, it is usually possible to rerun old R code without much hassle. But that’s what makes it worse; you get so used to this stability that you don’t think about a way to keep your projects reproducible, because issues rarely happen with R. It is thus best to get into the habit to use a tool like <code>{renv}</code>, which offers a certain stability to your projects.</p>
+<p><code>{renv}</code> creates separate package libraries, one per project. The idea is quite simple; start your project with <code>{renv}</code> enabled (if you’re using RStudio, you can check the box <em>Use renv with this project</em> when starting a new project, if you’re not using RStudio, you can run <code>renv::init()</code>, on the root of the folder’s project). This will create a file in the root of your project called <code>renv.lock</code>. You can open this file in a text editor, and you should see that the R version you’re currently using is recorded (and the version of <code>{renv}</code> itself). It should look something like this:</p>
+<pre><code>{
+  "R": {
+    "Version": "4.2.1",
+    "Repositories": [
+      {
+        "Name": "CRAN",
+        "URL": "http://cran.rstudio.com"
+      }
+    ]
+  },
+  "Packages": {
+    "renv": {
+      "Package": "renv",
+      "Version": "0.16.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c9e8442ab69bc21c9697ecf856c1e6c7",
+      "Requirements": []
+    }
+  }
+}</code></pre>
+<p>You can then work as usual. It doesn’t matter if you’re simply writing a script to perform a “simple” analysis, or doing something more complex like a RAP. You will likely need to re-install packages though; remember, <code>{renv}</code> sets up a library per project!</p>
+<p>Once you’re done and satisfied, run <code>renv::snapshot()</code>. As you might have guessed from the name this will take a snapshot of the project and write the current status to the <code>renv.lock</code> file:</p>
+<pre><code>&gt; renv::snapshot()
+The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- R6           [* -&gt; 2.5.1]
+- cli          [* -&gt; 3.4.1]
+- dplyr        [* -&gt; 1.0.10]
+- fansi        [* -&gt; 1.0.3]
+- generics     [* -&gt; 0.1.3]
+- glue         [* -&gt; 1.6.2]
+- lifecycle    [* -&gt; 1.0.3]
+- magrittr     [* -&gt; 2.0.3]
+- pillar       [* -&gt; 1.8.1]
+- pkgconfig    [* -&gt; 2.0.3]
+- rlang        [* -&gt; 1.0.6]
+- tibble       [* -&gt; 3.1.8]
+- tidyselect   [* -&gt; 1.2.0]
+- utf8         [* -&gt; 1.2.2]
+- vctrs        [* -&gt; 0.4.2]
+- withr        [* -&gt; 2.5.0]
+
+Do you want to proceed? [y/N]: </code></pre>
+<p>In it, you will see that the libraries needed to run the project are also recorded. The <code>renv.lock</code> will now look like this:</p>
+<pre><code>{
+  "R": {
+    "Version": "4.2.1",
+    "Repositories": [
+      {
+        "Name": "CRAN",
+        "URL": "http://cran.rstudio.com"
+      }
+    ]
+  },
+  "Packages": {
+    "R6": {
+      "Package": "R6",
+      "Version": "2.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "470851b6d5d0ac559e9d01bb352b4021",
+      "Requirements": []
+    },
+    "cli": {
+      "Package": "cli",
+      "Version": "3.4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0d297d01734d2bcea40197bd4971a764",
+      "Requirements": []
+    },
+    "dplyr": {
+      "Package": "dplyr",
+      "Version": "1.0.10",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "539412282059f7f0c07295723d23f987",
+      "Requirements": [
+        "R6",
+        "generics",
+        "glue",
+        "lifecycle",
+        "magrittr",
+        "pillar",
+        "rlang",
+        "tibble",
+        "tidyselect",
+        "vctrs"
+      ]
+    },
+    "fansi": {
+      "Package": "fansi",
+      "Version": "1.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "83a8afdbe71839506baa9f90eebad7ec",
+      "Requirements": []
+    },
+    "generics": {
+      "Package": "generics",
+      "Version": "0.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "15e9634c0fcd294799e9b2e929ed1b86",
+      "Requirements": []
+    },
+    "glue": {
+      "Package": "glue",
+      "Version": "1.6.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4f2596dfb05dac67b9dc558e5c6fba2e",
+      "Requirements": []
+    },
+    "lifecycle": {
+      "Package": "lifecycle",
+      "Version": "1.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "001cecbeac1cff9301bdc3775ee46a86",
+      "Requirements": [
+        "cli",
+        "glue",
+        "rlang"
+      ]
+    },
+    "magrittr": {
+      "Package": "magrittr",
+      "Version": "2.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7ce2733a9826b3aeb1775d56fd305472",
+      "Requirements": []
+    },
+    "pillar": {
+      "Package": "pillar",
+      "Version": "1.8.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f2316df30902c81729ae9de95ad5a608",
+      "Requirements": [
+        "cli",
+        "fansi",
+        "glue",
+        "lifecycle",
+        "rlang",
+        "utf8",
+        "vctrs"
+      ]
+    },
+    "pkgconfig": {
+      "Package": "pkgconfig",
+      "Version": "2.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "01f28d4278f15c76cddbea05899c5d6f",
+      "Requirements": []
+    },
+    "renv": {
+      "Package": "renv",
+      "Version": "0.16.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c9e8442ab69bc21c9697ecf856c1e6c7",
+      "Requirements": []
+    },
+    "rlang": {
+      "Package": "rlang",
+      "Version": "1.0.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4ed1f8336c8d52c3e750adcdc57228a7",
+      "Requirements": []
+    },
+    "tibble": {
+      "Package": "tibble",
+      "Version": "3.1.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "56b6934ef0f8c68225949a8672fe1a8f",
+      "Requirements": [
+        "fansi",
+        "lifecycle",
+        "magrittr",
+        "pillar",
+        "pkgconfig",
+        "rlang",
+        "vctrs"
+      ]
+    },
+    "tidyselect": {
+      "Package": "tidyselect",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "79540e5fcd9e0435af547d885f184fd5",
+      "Requirements": [
+        "cli",
+        "glue",
+        "lifecycle",
+        "rlang",
+        "vctrs",
+        "withr"
+      ]
+    },
+    "utf8": {
+      "Package": "utf8",
+      "Version": "1.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c9c462b759a5cc844ae25b5942654d13",
+      "Requirements": []
+    },
+    "vctrs": {
+      "Package": "vctrs",
+      "Version": "0.4.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0e3dfc070b2a8f0478fcdf86fb33355d",
+      "Requirements": [
+        "cli",
+        "glue",
+        "rlang"
+      ]
+    },
+    "withr": {
+      "Package": "withr",
+      "Version": "2.5.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c0e49a9760983e81e55cdd9be92e7182",
+      "Requirements": []
+    }
+  }
+}
+</code></pre>
+<p>On your end, you’re done. You can push this project to github.com for instance, and someone else who wishes to run this project will have to simply:</p>
+<ul>
+<li>Clone the repository;</li>
+<li>Run <code>renv::restore()</code> to install all the required libraries.</li>
+</ul>
+<p>And that’s it! This person, who might be future you, will now be able to re-run the project with the required libraries and the right versions.</p>
+<p>In a coming section we are actually going to do just that, but for now, let’s go back to <code>{targets}</code>.</p>
+</section>
+<section id="our-actual-first-pipeline" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="our-actual-first-pipeline"><span class="header-section-number">6.4</span> Our actual first pipeline</h2>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/mario.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Let’s start by building our very first pipeline. Our goal is the following: start with the unemployment data for Luxembourg, and build a series of graphs. We want one graph for Luxembourg, one graph for cantons, and one graph for selected communes. This series of graphs will be our data product; let’s not focus too much on the data product itself, the focus here is on building the pipeline. In the next chapter we are going to build more interesting data products.</p>
+<p>I’ve been mentioning pipelines for some time now, but what is it actually? Nothing more than a script. Let’s go back to the project we started at the beginning of the chapter. We can now create a <code>_targets.R</code> file on the root of the project. Insert the following lines in the script, we will then go through each of them:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(myPackage)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(unemp_data, <span class="fu">get_data</span>())</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The first line simply loads the <code>{targets}</code> package, the second to fourth lines load the packages required for the pipeline to actually run. Then comes a list. Inside this list is where we will define the targets, or the (intermediary) outputs of the pipeline. We defined <code>unemp_data</code> as being the output of the function <code>get_data()</code>… but where does this function come from? Well, we need to create another script called <code>functions.R</code> where we will define every function the we need for this pipeline. Let’s create an empty script and put the following lines in it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>get_data <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  myPackage<span class="sc">::</span>unemp</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This function is as simple as it gets; it doesn’t take any arguments and returns the data that we added to our package. This function could of course just as well read data from your computer, or from the Internet, and return it. The fact our data is inside our package is just for convenience. We can now go back to <code>_targets.R</code> and first of all, add a line to source this file, and then define new targets:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(myPackage)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"functions.R"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(unemp_data, <span class="fu">get_data</span>())</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can now run the pipeline using <code>tar_make()</code>… and you should get immediately an error:</p>
+<pre><code>&gt; targets::tar_make()
+• start target unemp_data
+✖ error target unemp_data
+• end pipeline [0.198 seconds]</code></pre>
+<p>This is because our package is not in the <code>renv.lock</code> file. Remember that <code>{renv}</code> creates a new library per project, and as such we now need to install <code>{myPackage}</code> from github.com into our project. For this, run the following line (you might need to install <code>{devtools}</code> beforehand):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"b-rodrigues/myPackage"</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">ref =</span> <span class="st">"e9d9129de3047c1ecce26d09dff429ec078d4dae"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The provided hash will make sure that the right version of the package gets installed for this project. This way, if I continue to work on the package, users will be able to still install the correct version. Since we’ve installed some new packages, run <code>renv::snapshot()</code> to rewrite the <code>renv.lock</code> file:</p>
+<pre><code>&gt; renv::snapshot()
+The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- Matrix       [* -&gt; 1.4-1]
+- backports    [* -&gt; 1.4.1]
+- base64url    [* -&gt; 1.4]
+- callr        [* -&gt; 3.7.2]
+- codetools    [* -&gt; 0.2-18]
+- data.table   [* -&gt; 1.14.4]
+- digest       [* -&gt; 0.6.30]
+- evaluate     [* -&gt; 0.17]
+- highr        [* -&gt; 0.9]
+- igraph       [* -&gt; 1.3.5]
+- knitr        [* -&gt; 1.40]
+- lattice      [* -&gt; 0.20-45]
+- processx     [* -&gt; 3.7.0]
+- ps           [* -&gt; 1.7.1]
+- stringi      [* -&gt; 1.7.8]
+- stringr      [* -&gt; 1.4.1]
+- targets      [* -&gt; 0.13.5]
+- xfun         [* -&gt; 0.34]
+- yaml         [* -&gt; 2.3.6]
+
+# GitHub =============================
+- myPackage    [* -&gt; b-rodrigues/myPackage@e9d9129de3047c1ecce26d09dff429ec078d4dae]
+
+Do you want to proceed? [y/N]: </code></pre>
+<p>It might be a good idea to take a look at the lock file, and in particular the <code>{myPackage}</code> entry. If everything went alright, you should see something like this:</p>
+<pre><code>"myPackage": {
+  "Package": "myPackage",
+  "Version": "0.1.0",
+  "Source": "GitHub",
+  "RemoteType": "github",
+  "RemoteHost": "api.github.com",
+  "RemoteRepo": "myPackage",
+  "RemoteUsername": "b-rodrigues",
+  "RemoteRef": "e9d9129de3047c1ecce26d09dff429ec078d4dae",
+  "RemoteSha": "e9d9129de3047c1ecce26d09dff429ec078d4dae",
+  "Hash": "4740b43847e10e012bad2b8a1a533433",
+  "Requirements": [
+    "dplyr",
+    "janitor",
+    "rlang"
+  ]
+},</code></pre>
+<p>It can happen that every entry starting with “Remote” is missing. This depends how this package was installed, and if the <code>DESCRIPTION</code> file of this package contains the required info. If you installed it using <code>devtools::install_github()</code>, it should be fine. But it is always better to check. In case these are missing, you should add them by hand. Adding these fields will ensure that the package will always get installed from github.com, and that the correct commit will be used. You can then save the lock file and commit it alongside the rest of your project.</p>
+<p>Ok, now we should be able to run our pipeline with <code>targets::tar_make()</code>.</p>
+<p>This will not create any output, but this way you can at least test that it’s running. Also, remember <code>tar_load()</code> and <code>tar_read()</code> from the walkthrough? First try to run <code>tar_read(unemp_data)</code>, this should print the data in your console. You can then run <code>tar_load(unemp_data)</code>, which this time loads the data in your global environment. You can now access it interactively. This is quite useful if you need to inspect intermediary outputs.</p>
+<p>Let’s now add intermediary outputs; we need data for Luxebmourg, data for the cantons and data for some communes. This is where the function <code>clean_unemp()</code> from our package will come into play:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(myPackage)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"functions.R"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    unemp_data,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">get_data</span>()</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    lux_data,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">clean_unemp</span>(unemp_data,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">place_name_of_interest =</span> <span class="st">"Luxembourg"</span>,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">level_of_interest =</span> <span class="st">"Country"</span>,</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">col_of_interest =</span> active_population)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    canton_data,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">clean_unemp</span>(unemp_data,</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>                <span class="at">level_of_interest =</span> <span class="st">"Canton"</span>,</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">col_of_interest =</span> active_population)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    commune_data,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">clean_unemp</span>(unemp_data,</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>                <span class="at">place_name_of_interest =</span> <span class="fu">c</span>(<span class="st">"Luxembourg"</span>, <span class="st">"Dippach"</span>, <span class="st">"Wiltz"</span>, <span class="st">"Esch/Alzette"</span>, <span class="st">"Mersch"</span>),</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>                <span class="at">col_of_interest =</span> active_population)</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>At this stage it might be interesting to take a look at the network. Call <code>tar_visnetwork()</code> (you might get prompted to install yet another package) and take a look at the pipeline:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/pipeline_2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>All that’s missing now is to write a function to create plots. Since we didn’t learn how to make them using <code>{ggplot2}</code>, simply copy the code below into the <code>functions.R</code> script:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>make_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(data) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> active_population,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> year,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> place_name</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can now use this function to define new targets in our <code>_targets.R</code> file:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(myPackage)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"functions.R"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        unemp_data,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">get_data</span>()</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        lux_data,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">clean_unemp</span>(unemp_data,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>                    <span class="at">place_name_of_interest =</span> <span class="st">"Luxembourg"</span>,</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                    <span class="at">level_of_interest =</span> <span class="st">"Country"</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_of_interest =</span> active_population)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>        canton_data,</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">clean_unemp</span>(unemp_data,</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>                    <span class="at">level_of_interest =</span> <span class="st">"Canton"</span>,</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_of_interest =</span> active_population)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>        commune_data,</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">clean_unemp</span>(unemp_data,</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>                    <span class="at">place_name_of_interest =</span> <span class="fu">c</span>(<span class="st">"Luxembourg"</span>, <span class="st">"Dippach"</span>, <span class="st">"Wiltz"</span>, <span class="st">"Esch/Alzette"</span>, <span class="st">"Mersch"</span>),</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_of_interest =</span> active_population)</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>        lux_plot,</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>        <span class="fu">make_plot</span>(lux_data)</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>        canton_plot,</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>        <span class="fu">make_plot</span>(canton_data)</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>        commune_plot,</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>        <span class="fu">make_plot</span>(commune_data)</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s now take a look at the pipeline again with <code>tar_visnetwork()</code>:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/pipeline_3.png" class="img-fluid"></p>
+</div>
+</div>
+<p>We see that new targets are outdated, and we need to run the pipeline to build them, so run the pipeline using <code>tar_make()</code>. If everything went well, we can now take a look at our plots using <code>tar_read(luxembourg_plot)</code>.</p>
+<p>Finally, let’s write these plots to disk. The way to save a <code>ggplot</code> to disk is to use the <code>ggsave()</code> function. But targets have to return something, so <a href="https://books.ropensci.org/targets/targets.html#side-effects">side-effects</a> like writing to disk must be handled in a specific way. What we’re going to do is write a wrapper around <code>ggsave()</code> that will take the path where the plot should be save to disk, save the plot to the specified path, and then return the plot. This way, we have a function that does not only have a side-effect, but also a return value. Let’s go back to <code>functions.R</code> and add the following lines:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>save_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(save_path, plot){</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(save_path, plot)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  save_path</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can now define these additional targets:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(myPackage)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"functions.R"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        unemp_data,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">get_data</span>()</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        lux_data,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">clean_unemp</span>(unemp_data,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>                    <span class="at">place_name_of_interest =</span> <span class="st">"Luxembourg"</span>,</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>                    <span class="at">level_of_interest =</span> <span class="st">"Country"</span>,</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_of_interest =</span> active_population)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>        canton_data,</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">clean_unemp</span>(unemp_data,</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>                    <span class="at">level_of_interest =</span> <span class="st">"Canton"</span>,</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_of_interest =</span> active_population)</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>        commune_data,</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">clean_unemp</span>(unemp_data,</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>                    <span class="at">place_name_of_interest =</span> <span class="fu">c</span>(<span class="st">"Luxembourg"</span>, <span class="st">"Dippach"</span>, <span class="st">"Wiltz"</span>, <span class="st">"Esch/Alzette"</span>, <span class="st">"Mersch"</span>),</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_of_interest =</span> active_population)</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>        lux_plot,</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>        <span class="fu">make_plot</span>(lux_data)</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>        canton_plot,</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>        <span class="fu">make_plot</span>(canton_data)</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>        commune_plot,</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>        <span class="fu">make_plot</span>(commune_data)</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>        luxembourg_saved_plot,</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>        <span class="fu">save_plot</span>(<span class="st">"fig/luxembourg.png"</span>, lux_plot),</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>        <span class="at">format =</span> <span class="st">"file"</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>        canton_saved_plot,</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>        <span class="fu">save_plot</span>(<span class="st">"fig/canton.png"</span>, canton_plot),</span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>        <span class="at">format =</span> <span class="st">"file"</span></span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar_target</span>(</span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>        commune_saved_plot,</span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>        <span class="fu">save_plot</span>(<span class="st">"fig/commune.png"</span>, commune_plot),</span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>        <span class="at">format =</span> <span class="st">"file"</span></span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s take a look at the network again:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/pipeline_4.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Because we are saving a file to disk, we must add the <code>format = "file"</code> argument to the target definiton. This way, <code>{targets}</code> watches these files for changes as well, and reruns the pipeline if a change is detected. Run the pipeline now with <code>tar_make()</code> and watch the plots appear in the <code>fig</code> folder (which you may have to create before running the pipeline).</p>
+<p>Let’s now change <code>make_plot()</code> function like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>make_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(data) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> active_population,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> year,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> place_name</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"Unemployement for "</span>, <span class="fu">paste</span>(<span class="fu">unique</span>(data<span class="sc">$</span>place_name), <span class="at">collapse =</span> <span class="st">", "</span>)))</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you know save the script, and check the pipeline with <code>tar_visnetwork()</code>, you will see that some targets are not out of date:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/pipeline_5.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Every targets that gets made by <code>make_plot()</code> must be recomputed, and every targets that depends on the intemediary outputs of <code>make_plot()</code> as well. Reloading the data is not necessary, since the edits on <code>make_plot()</code> do not affect these targets. This is an incredible cognitive load that is taken off the shoulders of data scientists; no need to keep track of outputs that are outdated, and no need to re-run everything either, saving lots of time and processing power.</p>
+<p>You now know the basics of setting up a reproducible (well, almost, as you’ll see) analytical pipeline. Let’s now move to running someone else’s pipeline.</p>
+</section>
+<section id="running-someone-elses-pipeline" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="running-someone-elses-pipeline"><span class="header-section-number">6.5</span> Running someone else’s pipeline</h2>
+<p>Let’s now suppose that we want to run someone else’s pipeline, and let’s assume that that person did a good job and used <code>{renv}</code> to lock the dependencies of the pipeline, and also made the pipeline available on github.com.</p>
+<p>As an example, we are going to use <a href="https://github.com/wlandau/targets-minimal">this repository</a> from the author of <code>{targets}</code>. To start clone this repository:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>git clone git<span class="sc">@</span>github.com<span class="sc">:</span>wlandau<span class="sc">/</span>targets<span class="sc">-</span>minimal.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and open an R session in the root of the folder (or open the <code>targets-minimal.rproj</code> file in the folder you just cloned to open the project in RStudio), then call <code>renv::restore()</code>. You should see this:</p>
+<pre><code>&gt; renv::restore()</code></pre>
+<pre><code>This project has not yet been activated.
+Activating this project will ensure the project library is used during restore.
+Please see `?renv::activate` for more details.
+
+Would you like to activate this project before restore? [Y/n]: </code></pre>
+<p>Press the <code>y</code> key on your keyboard to continue. The packages to run this pipeline will get installed in a new library, separate from the default library as usual with <code>{renv}</code>:</p>
+<pre><code>ℹ Using R 4.2.1 (lockfile was generated with R 4.1.0)
+* Project '~/targets-minimal' loaded. [renv 0.16.0]
+* The project library is out of sync with the lockfile.
+* Use `renv::restore()` to install packages recorded in the lockfile.
+The following package(s) will be updated:
+
+# CRAN ===============================
+...very long list of packages I'm not showing here...
+Do you want to proceed? [y/N]: </code></pre>
+<p>Press Y to install the packages in the separate library.</p>
+<p>As you can see from the screenshot below, because the packages used for this pipeline are not old(ish), they get either download from MRAN or from CRAN’s archive (MRAN is the Microsoft R Archive Network, a mirror of CRAN maintained by Microsoft, which gets snapshotted every day. It is thus possible to download old packages from there):</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/pipeline_6.png" class="img-fluid"></p>
+</div>
+</div>
+<p>You should now restart your R session for good measure (go to <code>Session -&gt; Restart Session</code>). You can now run the pipeline simply with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data product (or output) from this pipeline is the <code>index.html</code> file that appeared on the root folder of your project.</p>
+</section>
+<section id="running-any-code-with-older-packages" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="running-any-code-with-older-packages"><span class="header-section-number">6.6</span> Running any code with older packages</h2>
+<div style="text-align:center;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="img/calendar.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>What do you do if you need to run code with older packages, but the original developer did not use <code>{renv}</code>? In such cases it is still possible to run that code with older packages. What you would need to know however is the rough date where this code was written. Let’s say that you want to run an old script from 2019, and you want to make sure that the results you will obtain are as close, if not absolutely equal, to the results you would have obtained then. Let’s further assume that the script was last modified on October 31st 2019.</p>
+<p>You can rerun this script with a library that looks like one from that same date using a package made by Microsoft, called <code>{checkpoint}</code>. This package helps install packages from their repository, MRAN (which was already mentioned before), and is quite easy to use. Simply add the following line at the top of the script:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">checkpoint</span>(<span class="st">"2019-10-31"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can read more about checkpoint <a href="https://cran.microsoft.com/web/packages/checkpoint/vignettes/checkpoint.html">here</a>.</p>
+</section>
+<section id="why-we-need-more" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="why-we-need-more"><span class="header-section-number">6.7</span> Why we need more</h2>
+<p>While <code>{renv}</code> is a huge step towards the right direction, there are at least four problems with it:</p>
+<ul>
+<li><code>{renv}</code> doesn’t do anything about R itself: a pipeline made to run on R version 3 (for example) could still produce different results when run on R 4, even if the packages are the same. In practice, however, R is quite stable, and breaking changes between versions are very rare; most code is retrocompatible for many versions.</li>
+<li><code>{renv}</code> doesn’t do anything about the operating system the pipeline is running on. Results can even be different between <a href="https://www.frontiersin.org/articles/10.3389/fninf.2015.00012/full">different versions of the same operating system</a>, but in practice, that should only affect you in very specific businesses were very high precision floating point arithmetic is required.</li>
+<li><code>{renv}</code> can sometimes fail to install packages. I tried running William Landau’s demo pipeline on two computers, one running OpenSuse Linux and one running Windows 10. It ran successfully on Linux, but not on Windows.</li>
+<li><code>{renv}</code> relies on MRAN and CRAN. While it is unlikely that CRAN will ever be offline, as there are many, many mirrors around the world, <a href="https://en.wikipedia.org/wiki/Lindy_effect">and it could be argued that the longer CRAN is online, the likelier it is it’ll stay online</a>, the same cannot (yet) be said from MRAN. However, <code>{renv}</code> could be made to rely entirely on CRAN, so this last point might not be an issue.</li>
+</ul>
+<p>We are going to solve these issues in chapter 9, but for now, let’s be grateful for <code>{renv}</code>, <code>{targets}</code> and CRAN (and MRAN), for they allow us to quite easily build (almost) reproducible pipelines quite easily! In the next chapter, we will continue building pipelines and build our very first data products.</p>
+</section>
+<section id="further-reading" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">6.8</span> Further reading</h2>
+<ul>
+<li>The <code>{targets}</code> <a href="https://books.ropensci.org/targets/">manual</a></li>
+<li>The <code>{renv}</code> <a href="https://rstudio.github.io/renv/articles/renv.html">website</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./06-unit-tests.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Unit tests</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
