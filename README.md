@@ -13,6 +13,8 @@ to know in order to set up a RAP -- a reproducible analytical pipeline.
 
 For any questions, just open an issue on this repository.
 
+You can render the book locally: start by forking the repo and clone your fork, then after having installed the Nix package manager, drop into a Nix shell using `nix-shell` and then run `quarto render`.
+
 The code in this repo is licensed under the WTFPL.
 
 <a href="http://www.wtfpl.net/"><img
