@@ -2,6 +2,6 @@
 
 <div style="text-align:center;">
 ```{r, echo = F}
-knitr::include_graphics("img/octopus.png")
+knitr::include_graphics("img/nix.png")
 ```
 </div>
