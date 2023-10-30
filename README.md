@@ -2,6 +2,9 @@
 
 This is the 2023 edition of the course. If you’re looking for the 2022 edition:  https://github.com/b-rodrigues/rap4mads
 
+I wrote an entire book on the subject that you can read here: https://raps-with-r.dev/
+The book goes much deeper than the course obviously.
+
 This repository contains the files of the bookdown I use to teach "Reproducible Analytical Pipelines" in the master’s of data science at the University of Luxembourg.
 
 You can find the bookdown [here](https://b-rodrigues.github.io/rap4mads_2023/). 
