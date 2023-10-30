@@ -1,0 +1,7 @@
+# Reproducibility with Nix
+
+<div style="text-align:center;">
+```{r, echo = F}
+knitr::include_graphics("img/octopus.png")
+```
+</div>
