@@ -17,6 +17,7 @@ book:
     - 03-functional-programming.qmd
     - 04-git.qmd
     - 05-package-dev.qmd
+    - 06-unit-tests.qmd
   page-navigation: true
 
 bibliography: references.bib
