@@ -22,6 +22,7 @@ book:
     - 08-products.qmd
     - 09-docker.qmd
     - 10-github_actions.qmd
+    - 11-nix.qmd
   page-navigation: true
 
 bibliography: references.bib
