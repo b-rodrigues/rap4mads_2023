@@ -16,6 +16,7 @@ book:
     - 02-intro_R.qmd
     - 03-functional-programming.qmd
     - 04-git.qmd
+    - 05-package-dev.qmd
   page-navigation: true
 
 bibliography: references.bib
