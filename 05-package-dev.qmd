@@ -233,7 +233,7 @@ What is wrong with our function? After all, if I call the following, it works:
 
 ```{r}
 mtcars |>
-  filter(am == 1)
+  dplyr::filter(am == 1)
 ```
 
 So what gives? What's going on here, is that R doesn't know that it has look
