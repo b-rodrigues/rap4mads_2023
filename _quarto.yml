@@ -20,6 +20,7 @@ book:
     - 06-unit-tests.qmd
     - 07-targets.qmd
     - 08-products.qmd
+    - 09-docker.qmd
   page-navigation: true
 
 bibliography: references.bib
