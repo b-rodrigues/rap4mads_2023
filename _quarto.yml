@@ -23,6 +23,7 @@ book:
     - 09-docker.qmd
     - 10-github_actions.qmd
     - 11-nix.qmd
+    - 12-what-else.qmd
   page-navigation: true
 
 bibliography: references.bib
