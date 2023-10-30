@@ -12,6 +12,12 @@ knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 *This is the 2023 edition of the course. If you're looking for the 2022 edition,
 you can click [here](https://b-rodrigues.github.io/rap4mads/)*
 
+What’s new:
+- The book is now built using Quarto
+- Updated links to newer materials
+- Longer chatper on Github Actions
+- New chapter on reproducibility with Nix
+
 *This course is based on my book titled [Building Reproducible Analytical Pipelines
 with R](https://raps-with-r.dev/). This course focuses only on certain aspects
 that are discussed in greater detail in the book.*
