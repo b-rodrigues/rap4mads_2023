@@ -18,14 +18,14 @@ that are discussed in greater detail in the book.*
 
 ## Schedule
 
-- 2022/10/25, morning: Introduction and data exploration with R
-- 2022/10/25, afternoon: Functional programming
-- 2022/10/31, afternoon: Git (optional?)
-- 2022/11/07, afternoon: Package development and unit testing
-- 2022/11/08, morning: Build automation
-- 2022/11/08, afternoon: Building Data products
-- 2022/11/21, afternoon: Self-contained pipelines with Docker
-- 2022/11/22, morning: CI/CD with Github Actions
+- 2023/11/28: Introduction, data exploration with R and functional programming
+- 2023/12/04, Version control with Git
+- 2023/12/05, Package development and unit testing
+- 2023/12/11, Build automation
+- 2023/12/12, Literate programming and Shiny
+- 2023/12/18, Self-contained pipelines with Docker
+- 2023/12/19, CI/CD with Github Actions
+- 2023/12/19, Bonus session, if time allows: reproducibility with Nix
 
 ## Reproducible analytical pipelines?
 
