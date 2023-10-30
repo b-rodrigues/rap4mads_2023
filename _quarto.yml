@@ -18,6 +18,7 @@ book:
     - 04-git.qmd
     - 05-package-dev.qmd
     - 06-unit-tests.qmd
+    - 07-targets.qmd
   page-navigation: true
 
 bibliography: references.bib
