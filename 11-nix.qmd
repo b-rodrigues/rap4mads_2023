@@ -5,3 +5,5 @@
 knitr::include_graphics("img/nix.png")
 ```
 </div>
+
+Nix is a package manager...
