@@ -18,7 +18,7 @@ that are discussed in greater detail in the book.*
 
 ## Schedule
 
-- 2023/11/28: Introduction, data exploration with R and functional programming
+- 2023/11/28: Introduction to reproducibility and functional programming
 - 2023/12/04, Version control with Git
 - 2023/12/05, Package development and unit testing
 - 2023/12/11, Build automation
