@@ -25,11 +25,35 @@ of Nix is that it is possible to pin a certain revision of the Nix packages’ r
 ensures that every package that Nix installs will always be at exactly the same versions, regardless of when in the future the packages get installed.
 
 With Nix, it is essentially possible to replace {renv} and Docker combined. If you need other tools or languages like Python or Julia, 
-this can also be done easily. Nix is available for Linux, macOS and Windows (via WSL2).
+this can also be done easily. Nix is available for Linux, macOS and Windows (via WSL2). Important remark: since using Nix on Windows
+must go through WSL, when we refer to "Linux" in the context of Nix, this includes Windows by default as well.
 
 ## The Nix programming language
 
+Nix is not just useful because it is possible to install many packages and even install older packages, but also because it comes with a 
+complete functional programming language. This programming language is used to write *expressions*, and these expressions in turn are
+used to build software. Essentially, when you install a package using Nix, an expression gets downloaded from the Nix package repository
+(more on that in the next section), and it gets evaluated by the Nix package manager. This expression contains a so-called *derivation*.
+A derivation defines a build: some inputs, some commands, and then an output. Most of the time, a derivation downloads source code,
+builds the software from the source and then outputs a compiled binary. Derivations are extremely flexible, and you could write
+a derivation to build a complete environment and then build a complete reproducible pipeline. The output could be any of the 
+discussed data products.
+
+Learning the Nix programming language is a good idea if you want to contribute to the Nix package repository, but you might not have 
+to learn it in-depth if you simply wish to use it to build reproducible environments, as we will learn now. If you wish to learn about
+the programming language, I highly recommend [a tour of Nix](https://nixcloud.io/tour/?id=introduction/nix)^[https://nixcloud.io/tour/?id=introduction/nix].
+
 ## The Nix package repository
+
+So, there’s the Nix package manager, the Nix programming language and the Nix package repository (henceforth nixpkgs). To look for packages click
+[here](https://search.nixos.org/packages)^[https://search.nixos.org/packages]. The source code of all the packages (so 
+the whole set of Nix expressions) can be found on [this Github repository](https://github.com/NixOS/nixpkgs)^[https://github.com/NixOS/nixpkgs].
+For example, 
+[here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/quarto/default.nix)^[https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/quarto/default.nix] 
+is the Nix expression that contains the derivation to build `quarto`. As you can see, the derivation uses the the pre-built Quarto binaries
+instead of building it from source. Adding packages to nixpkgs (or updating them) can be done by opening pull requests. For example, 
+[here](https://github.com/NixOS/nixpkgs/pull/259443)^[https://github.com/NixOS/nixpkgs/pull/259443] is a pull request to make Quarto
+available to all platforms (before this PR Quarto was only available for Linux).
 
 ## The NixOS operating system
 
