@@ -93,7 +93,7 @@ Git and Docker.
 
 In my absolutely objective opinion R is currently the most interesting and
 simple language you can use to create such data products. If you learn R you
-have access to almost 19'000 packages (as of October 2022) to:
+have access to almost 20'000 packages (as of October 2023) to:
 
 - clean data (see: `{dplyr}`, `{tidyr}`, `{data.table}`...);
 - work with medium and big data (see: `{arrow}`, `{sparklyr}`...);
