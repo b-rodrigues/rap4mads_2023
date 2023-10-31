@@ -211,8 +211,9 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#the-nix-package-manager" id="toc-the-nix-package-manager" class="nav-link active" data-scroll-target="#the-nix-package-manager"><span class="header-section-number">10.1</span> The Nix package manager</a></li>
   <li><a href="#the-nix-programming-language" id="toc-the-nix-programming-language" class="nav-link" data-scroll-target="#the-nix-programming-language"><span class="header-section-number">10.2</span> The Nix programming language</a></li>
   <li><a href="#the-nix-package-repository" id="toc-the-nix-package-repository" class="nav-link" data-scroll-target="#the-nix-package-repository"><span class="header-section-number">10.3</span> The Nix package repository</a></li>
-  <li><a href="#the-nixos-operating-system" id="toc-the-nixos-operating-system" class="nav-link" data-scroll-target="#the-nixos-operating-system"><span class="header-section-number">10.4</span> The NixOS operating system</a></li>
-  <li><a href="#the-rix-package" id="toc-the-rix-package" class="nav-link" data-scroll-target="#the-rix-package"><span class="header-section-number">10.5</span> The {rix} package</a></li>
+  <li><a href="#the-nixos-operating-system-docker-and-github-actions" id="toc-the-nixos-operating-system-docker-and-github-actions" class="nav-link" data-scroll-target="#the-nixos-operating-system-docker-and-github-actions"><span class="header-section-number">10.4</span> The NixOS operating system, Docker and Github Actions</a></li>
+  <li><a href="#a-first-nix-expression" id="toc-a-first-nix-expression" class="nav-link" data-scroll-target="#a-first-nix-expression"><span class="header-section-number">10.5</span> A first Nix expression</a></li>
+  <li><a href="#the-rix-package" id="toc-the-rix-package" class="nav-link" data-scroll-target="#the-rix-package"><span class="header-section-number">10.6</span> The {rix} package</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/b-rodrigues/rap4mads_2023/edit/main/11-nix.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
     </div>
@@ -247,7 +248,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="10.1" class="anchored" data-anchor-id="the-nix-package-manager"><span class="header-section-number">10.1</span> The Nix package manager</h2>
 <p>Nix is a package manager that can be used to build completely reproducible development environments. These environments can be used for interactive data analysis or running pipelines in a CI/CD environment.</p>
 <p>If you’re familiar with the Ubuntu Linux distribution, you likely have used <code>apt-get</code> to install software. On macOS, you may have used <code>homebrew</code> for similar purposes. Nix functions in a similar way, but has many advantages over classic package managers. The main advantage of Nix, at least for our purposes, is that its repository of software is huge. As of writing, it contains more than 80.000 packages, and the entirety of CRAN and Bioconductor is available through Nix’s repositories. This means that using Nix, it is possible to install not only R, but also all the packages required for your project. The obvious question is why use Nix instead of simply installing R and R packages as usual. The answer is that Nix makes sure to install every dependency of any package, up to required system libraries. For example, the <code>{xlsx}</code> package requires the Java programming language to be installed on your computer to successfully install. This can be difficult to achieve, and <code>{xlsx}</code> bullied many R developers throughout the years (especially those using a Linux distribution, <code>sudo R CMD javareconf</code> still plagues my nightmares). But with Nix, it suffices to declare that we want the <code>{xlsx}</code> package for our project, and Nix figures out automatically that Java is required and installs and configures it. It all just happens without any required intervention from the user. The second advantage of Nix is that it is possible to pin a certain revision of the Nix packages’ repository (called nixpkgs) for our project. Pinning a revision ensures that every package that Nix installs will always be at exactly the same versions, regardless of when in the future the packages get installed.</p>
-<p>With Nix, it is essentially possible to replace {renv} and Docker combined. If you need other tools or languages like Python or Julia, this can also be done easily. Nix is available for Linux, macOS and Windows (via WSL2). Important remark: since using Nix on Windows must go through WSL, when we refer to “Linux” in the context of Nix, this includes Windows by default as well.</p>
+<p>With Nix, it is essentially possible to replace {renv} and Docker combined, or if you’re using mainly Python, you can replace <code>conda</code> or <code>requirements.txt</code> files. If you need other tools or languages like Python or Julia, this can also be done easily. Nix is available for Linux, macOS and Windows (via WSL2). Important remark: since using Nix on Windows must go through WSL, when we refer to “Linux” in the context of Nix, this includes Windows by default as well. It is also possible to build multi-language environments, containing R and Python, a LaTeX distribution and packages and so on.</p>
 </section>
 <section id="the-nix-programming-language" class="level2" data-number="10.2">
 <h2 data-number="10.2" class="anchored" data-anchor-id="the-nix-programming-language"><span class="header-section-number">10.2</span> The Nix programming language</h2>
@@ -256,13 +257,44 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="the-nix-package-repository" class="level2" data-number="10.3">
 <h2 data-number="10.3" class="anchored" data-anchor-id="the-nix-package-repository"><span class="header-section-number">10.3</span> The Nix package repository</h2>
-<p>So, there’s the Nix package manager, the Nix programming language and the Nix package repository (henceforth nixpkgs). To look for packages click <a href="https://search.nixos.org/packages">here</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. The source code of all the packages (so the whole set of Nix expressions) can be found on <a href="https://github.com/NixOS/nixpkgs">this Github repository</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. For example, <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/quarto/default.nix">here</a><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> is the Nix expression that contains the derivation to build <code>quarto</code>. As you can see, the derivation uses the the pre-built Quarto binaries instead of building it from source. Adding packages to nixpkgs (or updating them) can be done by opening pull requests. For example, <a href="https://github.com/NixOS/nixpkgs/pull/259443">here</a><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> is a pull request to make Quarto available to all platforms (before this PR Quarto was only available for Linux).</p>
+<p>So, there’s the Nix package manager, the Nix programming language and the Nix package repository (henceforth nixpkgs). To look for packages click <a href="https://search.nixos.org/packages">here</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. The source code of all the packages (so the whole set of Nix expressions) can be found on <a href="https://github.com/NixOS/nixpkgs">this Github repository</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. For example, <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/quarto/default.nix">here</a><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> is the Nix expression that contains the derivation to build <code>quarto</code>. As you can see, the derivation uses the the pre-built Quarto binaries instead of building it from source. Adding packages to nixpkgs (or updating them) can be done by opening pull requests. For example, <a href="https://github.com/NixOS/nixpkgs/pull/259443">here</a><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> is a pull request to make Quarto available to all platforms (before this PR Quarto was only available for Linux). PRs get reviewed and approuved by maintainers that also have the right to merge the PR into master. Once merged, the new or updated package is available for download. Because nixpkgs is a “just” Github repository, it is possible to use a specific commit hash to install the packages as they were at a specific point in time. For example, if you use this commit, 7c9cc5a6e, you’ll get the packages as of the 19th of October 2023, but if you used this one instead: 976fa3369, you’ll get packages from the 19th of August 2023. Using specific hashes is called “pinning” and you can read more about it <a href="https://nixos.wiki/wiki/FAQ/Pinning_Nixpkgs">here</a>. We will make extensive use of pinning.</p>
 </section>
-<section id="the-nixos-operating-system" class="level2" data-number="10.4">
-<h2 data-number="10.4" class="anchored" data-anchor-id="the-nixos-operating-system"><span class="header-section-number">10.4</span> The NixOS operating system</h2>
+<section id="the-nixos-operating-system-docker-and-github-actions" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="the-nixos-operating-system-docker-and-github-actions"><span class="header-section-number">10.4</span> The NixOS operating system, Docker and Github Actions</h2>
+<p>NixOS is a Linux distribution that uses the Nix package manager as its package manager. I won’t go into detail here, but you should know it exists. What’s perhaps more interesting for our purposes is to use Nix within Docker. Because Nix can be installed as any other tool, you could very well build a Docker image that starts by installing Nix, and then uses Nix to install, in a reproducible manner, all the tools you need for your project.</p>
+<p>There are also a series of Github Actions that you can use to install Nix on runners and build development environments. We will also look that.</p>
 </section>
-<section id="the-rix-package" class="level2" data-number="10.5">
-<h2 data-number="10.5" class="anchored" data-anchor-id="the-rix-package"><span class="header-section-number">10.5</span> The {rix} package</h2>
+<section id="a-first-nix-expression" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="a-first-nix-expression"><span class="header-section-number">10.5</span> A first Nix expression</h2>
+<p>The following expression is the one that defines the development environment to build this book:</p>
+<pre><code>let
+ pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/976fa3369d722e76f37c77493d99829540d43845.tar.gz") {};
+ rpkgs = builtins.attrValues {
+  inherit (pkgs.rPackages) quarto Ecdat devtools janitor plm pwt9 rio targets tarchetypes testthat tidyverse usethis formatR;
+};
+  tex = (pkgs.texlive.combine {
+  inherit (pkgs.texlive) scheme-small amsmath framed fvextra environ fontawesome5 orcidlink pdfcol tcolorbox tikzfill;
+});
+ system_packages = builtins.attrValues {
+  inherit (pkgs) R glibcLocalesUtf8 quarto;
+};
+  in
+  pkgs.mkShell {
+    LOCALE_ARCHIVE = if pkgs.system == "x86_64-linux" then  "${pkgs.glibcLocalesUtf8}/lib/locale/locale-archive" else "";
+    LANG = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+
+    buildInputs = [  rpkgs tex system_packages  ];
+      
+  }</code></pre>
+<p>I won’t go into much detail, but here are some pointers:</p>
+</section>
+<section id="the-rix-package" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="the-rix-package"><span class="header-section-number">10.6</span> The {rix} package</h2>
 
 
 </section>
