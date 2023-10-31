@@ -217,7 +217,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/b-rodrigues/rap4mads_2023/edit/main/11-nix.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -247,13 +247,16 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="10.1" class="anchored" data-anchor-id="the-nix-package-manager"><span class="header-section-number">10.1</span> The Nix package manager</h2>
 <p>Nix is a package manager that can be used to build completely reproducible development environments. These environments can be used for interactive data analysis or running pipelines in a CI/CD environment.</p>
 <p>If you’re familiar with the Ubuntu Linux distribution, you likely have used <code>apt-get</code> to install software. On macOS, you may have used <code>homebrew</code> for similar purposes. Nix functions in a similar way, but has many advantages over classic package managers. The main advantage of Nix, at least for our purposes, is that its repository of software is huge. As of writing, it contains more than 80.000 packages, and the entirety of CRAN and Bioconductor is available through Nix’s repositories. This means that using Nix, it is possible to install not only R, but also all the packages required for your project. The obvious question is why use Nix instead of simply installing R and R packages as usual. The answer is that Nix makes sure to install every dependency of any package, up to required system libraries. For example, the <code>{xlsx}</code> package requires the Java programming language to be installed on your computer to successfully install. This can be difficult to achieve, and <code>{xlsx}</code> bullied many R developers throughout the years (especially those using a Linux distribution, <code>sudo R CMD javareconf</code> still plagues my nightmares). But with Nix, it suffices to declare that we want the <code>{xlsx}</code> package for our project, and Nix figures out automatically that Java is required and installs and configures it. It all just happens without any required intervention from the user. The second advantage of Nix is that it is possible to pin a certain revision of the Nix packages’ repository (called nixpkgs) for our project. Pinning a revision ensures that every package that Nix installs will always be at exactly the same versions, regardless of when in the future the packages get installed.</p>
-<p>With Nix, it is essentially possible to replace {renv} and Docker combined. If you need other tools or languages like Python or Julia, this can also be done easily. Nix is available for Linux, macOS and Windows (via WSL2).</p>
+<p>With Nix, it is essentially possible to replace {renv} and Docker combined. If you need other tools or languages like Python or Julia, this can also be done easily. Nix is available for Linux, macOS and Windows (via WSL2). Important remark: since using Nix on Windows must go through WSL, when we refer to “Linux” in the context of Nix, this includes Windows by default as well.</p>
 </section>
 <section id="the-nix-programming-language" class="level2" data-number="10.2">
 <h2 data-number="10.2" class="anchored" data-anchor-id="the-nix-programming-language"><span class="header-section-number">10.2</span> The Nix programming language</h2>
+<p>Nix is not just useful because it is possible to install many packages and even install older packages, but also because it comes with a complete functional programming language. This programming language is used to write <em>expressions</em>, and these expressions in turn are used to build software. Essentially, when you install a package using Nix, an expression gets downloaded from the Nix package repository (more on that in the next section), and it gets evaluated by the Nix package manager. This expression contains a so-called <em>derivation</em>. A derivation defines a build: some inputs, some commands, and then an output. Most of the time, a derivation downloads source code, builds the software from the source and then outputs a compiled binary. Derivations are extremely flexible, and you could write a derivation to build a complete environment and then build a complete reproducible pipeline. The output could be any of the discussed data products.</p>
+<p>Learning the Nix programming language is a good idea if you want to contribute to the Nix package repository, but you might not have to learn it in-depth if you simply wish to use it to build reproducible environments, as we will learn now. If you wish to learn about the programming language, I highly recommend <a href="https://nixcloud.io/tour/?id=introduction/nix">a tour of Nix</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 </section>
 <section id="the-nix-package-repository" class="level2" data-number="10.3">
 <h2 data-number="10.3" class="anchored" data-anchor-id="the-nix-package-repository"><span class="header-section-number">10.3</span> The Nix package repository</h2>
+<p>So, there’s the Nix package manager, the Nix programming language and the Nix package repository (henceforth nixpkgs). To look for packages click <a href="https://search.nixos.org/packages">here</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. The source code of all the packages (so the whole set of Nix expressions) can be found on <a href="https://github.com/NixOS/nixpkgs">this Github repository</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. For example, <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/quarto/default.nix">here</a><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> is the Nix expression that contains the derivation to build <code>quarto</code>. As you can see, the derivation uses the the pre-built Quarto binaries instead of building it from source. Adding packages to nixpkgs (or updating them) can be done by opening pull requests. For example, <a href="https://github.com/NixOS/nixpkgs/pull/259443">here</a><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> is a pull request to make Quarto available to all platforms (before this PR Quarto was only available for Linux).</p>
 </section>
 <section id="the-nixos-operating-system" class="level2" data-number="10.4">
 <h2 data-number="10.4" class="anchored" data-anchor-id="the-nixos-operating-system"><span class="header-section-number">10.4</span> The NixOS operating system</h2>
@@ -263,6 +266,16 @@ ul.task-list li input[type="checkbox"] {
 
 
 </section>
+<aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>https://nixcloud.io/tour/?id=introduction/nix<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>https://search.nixos.org/packages<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>https://github.com/NixOS/nixpkgs<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/quarto/default.nix<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>https://github.com/NixOS/nixpkgs/pull/259443<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
