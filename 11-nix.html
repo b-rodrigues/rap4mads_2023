@@ -204,7 +204,17 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-nix-package-manager" id="toc-the-nix-package-manager" class="nav-link active" data-scroll-target="#the-nix-package-manager"><span class="header-section-number">10.1</span> The Nix package manager</a></li>
+  <li><a href="#the-nix-programming-language" id="toc-the-nix-programming-language" class="nav-link" data-scroll-target="#the-nix-programming-language"><span class="header-section-number">10.2</span> The Nix programming language</a></li>
+  <li><a href="#the-nix-package-repository" id="toc-the-nix-package-repository" class="nav-link" data-scroll-target="#the-nix-package-repository"><span class="header-section-number">10.3</span> The Nix package repository</a></li>
+  <li><a href="#the-nixos-operating-system" id="toc-the-nixos-operating-system" class="nav-link" data-scroll-target="#the-nixos-operating-system"><span class="header-section-number">10.4</span> The NixOS operating system</a></li>
+  <li><a href="#the-rix-package" id="toc-the-rix-package" class="nav-link" data-scroll-target="#the-rix-package"><span class="header-section-number">10.5</span> The {rix} package</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/b-rodrigues/rap4mads_2023/edit/main/11-nix.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -233,9 +243,26 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<p>Nix is a package manager…</p>
+<section id="the-nix-package-manager" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="the-nix-package-manager"><span class="header-section-number">10.1</span> The Nix package manager</h2>
+<p>Nix is a package manager that can be used to build completely reproducible development environments. These environments can be used for interactive data analysis or running pipelines in a CI/CD environment.</p>
+<p>If you’re familiar with the Ubuntu Linux distribution, you likely have used <code>apt-get</code> to install software. On macOS, you may have used <code>homebrew</code> for similar purposes. Nix functions in a similar way, but has many advantages over classic package managers. The main advantage of Nix, at least for our purposes, is that its repository of software is huge. As of writing, it contains more than 80.000 packages, and the entirety of CRAN and Bioconductor is available through Nix’s repositories. This means that using Nix, it is possible to install not only R, but also all the packages required for your project. The obvious question is why use Nix instead of simply installing R and R packages as usual. The answer is that Nix makes sure to install every dependency of any package, up to required system libraries. For example, the <code>{xlsx}</code> package requires the Java programming language to be installed on your computer to successfully install. This can be difficult to achieve, and <code>{xlsx}</code> bullied many R developers throughout the years (especially those using a Linux distribution, <code>sudo R CMD javareconf</code> still plagues my nightmares). But with Nix, it suffices to declare that we want the <code>{xlsx}</code> package for our project, and Nix figures out automatically that Java is required and installs and configures it. It all just happens without any required intervention from the user. The second advantage of Nix is that it is possible to pin a certain revision of the Nix packages’ repository (called nixpkgs) for our project. Pinning a revision ensures that every package that Nix installs will always be at exactly the same versions, regardless of when in the future the packages get installed.</p>
+<p>With Nix, it is essentially possible to replace {renv} and Docker combined. If you need other tools or languages like Python or Julia, this can also be done easily. Nix is available for Linux, macOS and Windows (via WSL2).</p>
+</section>
+<section id="the-nix-programming-language" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="the-nix-programming-language"><span class="header-section-number">10.2</span> The Nix programming language</h2>
+</section>
+<section id="the-nix-package-repository" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="the-nix-package-repository"><span class="header-section-number">10.3</span> The Nix package repository</h2>
+</section>
+<section id="the-nixos-operating-system" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="the-nixos-operating-system"><span class="header-section-number">10.4</span> The NixOS operating system</h2>
+</section>
+<section id="the-rix-package" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="the-rix-package"><span class="header-section-number">10.5</span> The {rix} package</h2>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
