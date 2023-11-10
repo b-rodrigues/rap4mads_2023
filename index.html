@@ -339,14 +339,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="schedule" class="level2">
 <h2 class="anchored" data-anchor-id="schedule">Schedule</h2>
 <ul>
-<li>2023/11/28, Introduction to reproducibility and functional programming</li>
-<li>2023/12/04, Version control with Git</li>
-<li>2023/12/05, Package development and unit testing</li>
-<li>2023/12/11, Build automation</li>
-<li>2023/12/12, Literate programming and Shiny</li>
-<li>2023/12/18, Self-contained pipelines with Docker</li>
-<li>2023/12/19, CI/CD with Github Actions</li>
-<li>2023/12/19, Bonus session, if time allows: reproducibility with Nix</li>
+<li>2023/11/27, Introduction to reproducibility and functional programming</li>
+<li>2023/11/28, Version control with Git, Package development and unit testing</li>
+<li>2023/12/05, Build automation</li>
+<li>2023/12/11, Literate programming and Shiny</li>
+<li>2023/12/12, Self-contained pipelines with Docker</li>
+<li>2023/12/18, CI/CD with Github Actions</li>
+<li>2023/12/19, Reproducibility with Nix</li>
 </ul>
 </section>
 <section id="reproducible-analytical-pipelines" class="level2">
@@ -412,12 +411,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="grading">Grading</h2>
 <p>The way grading works in this course is as follows: during lecture hours you will follow along. At home, you’ll be working on setting up your own pipeline. For this, choose a dataset that ideally would need some cleaning and/or tweaking to be usable. We are going first to learn how to package this dataset alongside some functions to make it clean. If time allows, I’ll leave some time during lecture hours for you to work on it and ask me and your colleagues for help. At the end of the semester, I will need to download your code and get it running. The less effort this takes me, the better your score. Here is a tentative breakdown:</p>
 <ul>
-<li><p>Code is on github.com and I can pull it: 2 points;</p></li>
-<li><p>Data and functions to run pipeline are in a tested, documented package? 3 points;</p></li>
-<li><p>I don’t need to do anything to load data: 5 points;</p></li>
-<li><p>I can download and install your pipeline’s dependencies in one command line: 5 points;</p></li>
-<li><p>I can run your pipeline in one command line: 5 points</p></li>
-<li><p>Extra points: pipeline is dockerized and uses github actions to run? 5 points</p></li>
+<li>Code is on github.com and the repository is documented with a Readme.md file: 5 points;</li>
+<li>Data and functions to run pipeline are documented and tested: 5 points;</li>
+<li>Every software dependency is easily installed: 5 points;</li>
+<li>Pipeline can be executed in one command: 5 points;</li>
+<li>Bonus points: pipeline is dockerized, or uses Nix, and/or uses Github Actions to run? 5 points</li>
 </ul>
 <p>The way to fail this class is to write an undocumented script that only runs on your machine and expect me to debug it to get it to run.</p>
 </section>
@@ -443,6 +441,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="https://cran.r-project.org/doc/manuals/r-release/R-intro.html">An Introduction to R (from the R team themselves)</a></li>
 <li><a href="https://cran.r-project.org/doc/FAQ/R-FAQ.html#What-is-CRAN_003f">What is CRAN?</a></li>
 <li><a href="https://www.burns-stat.com/pages/Tutor/R_inferno.pdf">The R Inferno</a></li>
+<li><a href="https://raps-with-r.dev/">Building Reproducible Analytical Pipelines with R</a></li>
 <li><a href="https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/">Reproducible Analytical Pipelines (RAP)</a></li>
 </ul>
 </section>
