@@ -25,14 +25,13 @@ that are discussed in greater detail in the book.*
 
 ## Schedule
 
-- 2023/11/28, Introduction to reproducibility and functional programming
-- 2023/12/04, Version control with Git
-- 2023/12/05, Package development and unit testing
-- 2023/12/11, Build automation
-- 2023/12/12, Literate programming and Shiny
-- 2023/12/18, Self-contained pipelines with Docker
-- 2023/12/19, CI/CD with Github Actions
-- 2023/12/19, Bonus session, if time allows: reproducibility with Nix
+- 2023/11/27, Introduction to reproducibility and functional programming
+- 2023/11/28, Version control with Git, Package development and unit testing
+- 2023/12/05, Build automation
+- 2023/12/11, Literate programming and Shiny
+- 2023/12/12, Self-contained pipelines with Docker
+- 2023/12/18, CI/CD with Github Actions
+- 2023/12/19, Reproducibility with Nix
 
 ## Reproducible analytical pipelines?
 
@@ -179,13 +178,11 @@ the end of the semester, I will need to download your code and get it running.
 The less effort this takes me, the better your score. Here is a tentative
 breakdown:
 
-- Code is on github.com and I can pull it: 2 points;
-- Data and functions to run pipeline are in a tested, documented package? 3 points;
-- I don't need to do anything to load data: 5 points;
-- I can download and install your pipeline's dependencies in one command line: 5 points;
-- I can run your pipeline in one command line: 5 points
-
-- Extra points: pipeline is dockerized and uses github actions to run? 5 points 
+- Code is on github.com and the repository is documented with a Readme.md file: 5 points;
+- Data and functions to run pipeline are documented and tested: 5 points;
+- Every software dependency is easily installed: 5 points;
+- Pipeline can be executed in one command: 5 points;
+- Bonus points: pipeline is dockerized, or uses Nix, and/or uses Github Actions to run? 5 points
 
 The way to fail this class is to write an undocumented script that only runs on
 your machine and expect me to debug it to get it to run.
@@ -211,6 +208,7 @@ Here’s a non-exhaustive list to get you started:
 - [An Introduction to R (from the R team themselves)](https://cran.r-project.org/doc/manuals/r-release/R-intro.html)
 - [What is CRAN?](https://cran.r-project.org/doc/FAQ/R-FAQ.html#What-is-CRAN_003f)
 - [The R Inferno](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf)
+- [Building Reproducible Analytical Pipelines with R](https://raps-with-r.dev/)
 - [Reproducible Analytical Pipelines (RAP)](https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/)
 
 ## License
