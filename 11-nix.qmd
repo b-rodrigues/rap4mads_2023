@@ -100,7 +100,8 @@ let
       
   }
 ```
-Thi first line imports a specfic hash of nixpkgs (pinning):
+
+The first line imports a specfic hash of nixpkgs (pinning):
 
 ```
 pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/976fa3369d722e76f37c77493d99829540d43845.tar.gz") {};
@@ -163,3 +164,43 @@ Writing these Nix expressions is not easy, and there is a lot of boilerplate cod
 a package I wrote, called `{rix}`, can help you.
 
 ## The {rix} package
+
+{rix} is an R package that provides functions to help you write Nix expressions: these expressions can then be used by the Nix package manager to
+build completely reproducible development environments. These environments can be used for interactive data analysis or running pipelines in a CI/CD environment. 
+Environments built with Nix contain R and all the required packages that you need for your project: there are currently more than 80.000 pieces of software 
+available through the Nix package manager, including the entirety of CRAN and Bioconductor packages. The Nix package manager is extremely powerful: not only it handles 
+all the dependencies of any package extremely well, it is also possible with it to reproduce environments containing old releases of software. It is thus possible to build 
+environments that contain R version 4.0.0 (for example) to run an old project originally developed on that version of R.
+
+First, you need to install the Nix package manager on your system. For this, we are going to use the installer from [Determinate Systems](https://determinate.systems/posts/determinate-nix-installer).
+Simply run the following command in a terminal:
+
+```
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+```
+
+If you wish to uninstall Nix, run the same command. Then, if you already have R installed on your system, you can install the `{rix}` package using:
+
+```{r, eval = F}
+install.packages("rix", repos = c("https://b-rodrigues.r-universe.dev",
+  "https://cloud.r-project.org"))
+```
+
+From there, you can start a new R session and try out `{rix}` like so:
+
+```{r, eval = F}
+rix(r_ver = "latest",
+    r_pkgs = c("dplyr", "ggplot2"),
+    system_pkgs = NULL,
+    git_pkgs = NULL,
+    ide = "other",
+    project_path = ".",
+    overwrite = TRUE)
+```
+
+this will create a `default.nix` file in the project root. Open a terminal where `default.nix` is, and run `nix-build`. This will create a file called `result` in the same folder.
+You can now *drop* into a shell with the specified packages using `nix-shell`.
+
+## Running a pipeline with Nix
+
+## CI/CD with Nix
