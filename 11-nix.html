@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -241,6 +275,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#the-nixos-operating-system-docker-and-github-actions" id="toc-the-nixos-operating-system-docker-and-github-actions" class="nav-link" data-scroll-target="#the-nixos-operating-system-docker-and-github-actions"><span class="header-section-number">10.4</span> The NixOS operating system, Docker and Github Actions</a></li>
   <li><a href="#a-first-nix-expression" id="toc-a-first-nix-expression" class="nav-link" data-scroll-target="#a-first-nix-expression"><span class="header-section-number">10.5</span> A first Nix expression</a></li>
   <li><a href="#the-rix-package" id="toc-the-rix-package" class="nav-link" data-scroll-target="#the-rix-package"><span class="header-section-number">10.6</span> The {rix} package</a></li>
+  <li><a href="#running-a-pipeline-with-nix" id="toc-running-a-pipeline-with-nix" class="nav-link" data-scroll-target="#running-a-pipeline-with-nix"><span class="header-section-number">10.7</span> Running a pipeline with Nix</a></li>
+  <li><a href="#cicd-with-nix" id="toc-cicd-with-nix" class="nav-link" data-scroll-target="#cicd-with-nix"><span class="header-section-number">10.8</span> CI/CD with Nix</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/b-rodrigues/rap4mads_2023/edit/main/11-nix.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -320,7 +356,7 @@ ul.task-list li input[type="checkbox"] {
     buildInputs = [  rpkgs tex system_packages  ];
       
   }</code></pre>
-<p>Thi first line imports a specfic hash of nixpkgs (pinning):</p>
+<p>The first line imports a specfic hash of nixpkgs (pinning):</p>
 <pre><code>pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/976fa3369d722e76f37c77493d99829540d43845.tar.gz") {};</code></pre>
 <p>Then, I define the set of R packages that we require:</p>
 <pre><code>rpkgs = builtins.attrValues {
@@ -354,6 +390,31 @@ pkgs.mkShell {
 </section>
 <section id="the-rix-package" class="level2" data-number="10.6">
 <h2 data-number="10.6" class="anchored" data-anchor-id="the-rix-package"><span class="header-section-number">10.6</span> The {rix} package</h2>
+<p>{rix} is an R package that provides functions to help you write Nix expressions: these expressions can then be used by the Nix package manager to build completely reproducible development environments. These environments can be used for interactive data analysis or running pipelines in a CI/CD environment. Environments built with Nix contain R and all the required packages that you need for your project: there are currently more than 80.000 pieces of software available through the Nix package manager, including the entirety of CRAN and Bioconductor packages. The Nix package manager is extremely powerful: not only it handles all the dependencies of any package extremely well, it is also possible with it to reproduce environments containing old releases of software. It is thus possible to build environments that contain R version 4.0.0 (for example) to run an old project originally developed on that version of R.</p>
+<p>First, you need to install the Nix package manager on your system. For this, we are going to use the installer from <a href="https://determinate.systems/posts/determinate-nix-installer">Determinate Systems</a>. Simply run the following command in a terminal:</p>
+<pre><code>curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install</code></pre>
+<p>If you wish to uninstall Nix, run the same command. Then, if you already have R installed on your system, you can install the <code>{rix}</code> package using:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rix"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://b-rodrigues.r-universe.dev"</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://cloud.r-project.org"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>From there, you can start a new R session and try out <code>{rix}</code> like so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rix</span>(<span class="at">r_ver =</span> <span class="st">"latest"</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">r_pkgs =</span> <span class="fu">c</span>(<span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">system_pkgs =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">git_pkgs =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ide =</span> <span class="st">"other"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">project_path =</span> <span class="st">"."</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>this will create a <code>default.nix</code> file in the project root. Open a terminal where <code>default.nix</code> is, and run <code>nix-build</code>. This will create a file called <code>result</code> in the same folder. You can now <em>drop</em> into a shell with the specified packages using <code>nix-shell</code>.</p>
+</section>
+<section id="running-a-pipeline-with-nix" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="running-a-pipeline-with-nix"><span class="header-section-number">10.7</span> Running a pipeline with Nix</h2>
+</section>
+<section id="cicd-with-nix" class="level2" data-number="10.8">
+<h2 data-number="10.8" class="anchored" data-anchor-id="cicd-with-nix"><span class="header-section-number">10.8</span> CI/CD with Nix</h2>
 
 
 </section>
