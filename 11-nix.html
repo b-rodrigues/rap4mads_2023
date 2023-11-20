@@ -412,9 +412,13 @@ pkgs.mkShell {
 </section>
 <section id="running-a-pipeline-with-nix" class="level2" data-number="10.7">
 <h2 data-number="10.7" class="anchored" data-anchor-id="running-a-pipeline-with-nix"><span class="header-section-number">10.7</span> Running a pipeline with Nix</h2>
+<p>Once you’ve built and environment, and “dropped” into it, it’s possible to run R by simply typing <code>R</code> in the console. If instead you’ve installed an IDE, you can start is as well by typing the IDE name’s. You can then work interactively with your data. But it is also possible to run a command from that environment. For instance, if you have a <code>{targets}</code> pipeline that you wish to run in an environment built with Nix, you could run the following command (inside the folder containing the <code>default.nix</code> file):</p>
+<pre><code>nix-shell default.nix --run "Rscript -e 'targets::tar_make()'"</code></pre>
+<p>This will run the pipeline and build the output. If the output is a rendered Quarto document for instance, you will then see the document appear in the specified output folder.</p>
 </section>
 <section id="cicd-with-nix" class="level2" data-number="10.8">
 <h2 data-number="10.8" class="anchored" data-anchor-id="cicd-with-nix"><span class="header-section-number">10.8</span> CI/CD with Nix</h2>
+<p>It is also possible to run a <code>{targets}</code> pipeline on Github Actions quite easily. Run <code>rix::tar_nix_ga()</code> to add the file <code>.github/workflows/run-pipeline.yaml</code> to your project. Now, each time you push changes to your Github repository, the pipeline will be executed. Don’t forget to give read and write rights to the Github Actions bot. You will find the outputs of the pipeline in the <code>targets-run</code> branch of your repository.</p>
 
 
 </section>
