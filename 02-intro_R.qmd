@@ -1,3 +1,8 @@
+---
+webr:
+  packages: ['dplyr']
+---
+
 # Introduction to R
 
 <div style="text-align:center;">
@@ -55,7 +60,7 @@ and `feather` formats).
 Since R version 4.1, a forward pipe `|>` is included in the standard library of
 the language. It allows to do this:
 
-```{r}
+```{webr-r}
 
 4 |>
   sqrt()
@@ -66,7 +71,7 @@ Before R version 4.1, there was already a forward pipe, introduced with the
 `{magrittr}` package (and automatically loaded by many other packages from the
 *tidyverse*, like `{dplyr}`):
 
-```{r}
+```{webr-r}
 library(dplyr)
 
 4 %>%
