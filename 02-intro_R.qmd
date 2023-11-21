@@ -1,4 +1,6 @@
 ---
+filters:
+  - webr
 webr:
   packages: ['dplyr']
 ---
