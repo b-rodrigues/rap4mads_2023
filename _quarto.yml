@@ -1,6 +1,5 @@
 project:
-  type: book 
-  filters: webr
+  type: book
 
 book:
   title: "Building Reproducible Analytical Pipelines"
