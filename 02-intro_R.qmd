@@ -92,6 +92,39 @@ of my other book, ideally you should study the entirety of the chapter, but for
 our purposes you should really focus on sections 4.3, 4.4, 4.5.3, 4.5.4,
 (optionally 4.7) and 4.8.
 
+You should be able to read and understand expressions like the one below after having read the chapters above.
+
+```{webr-r}
+starwars %>%
+  group_by(sex) %>%
+  summarise(mean_height = mean(height, na.rm = TRUE))
+```
+
+While optional, the concept of list-columns is quite powerful and I wanted to say a few words about it. Take a look at the types of columns
+of the `starwars` dataset:
+
+```{webr-r}
+str(starwars)
+```
+
+Each of the elements of the column `films` is a list. For example:
+
+```{webr-r}
+starwars %>% 
+  filter(name == "Luke Skywalker") %>%  
+  select(name, films) %>% 
+  lapply(class)
+```
+
+Because lists are very flexible and can contain any data type, it is possible to have a list-column of data frames. 
+This is extremely useful to operate on groups without having to use loops:
+
+```{webr-r}
+starwars %>% 
+  group_nest(sex) 
+```
+
+It is now possible to apply any function that takes a data frame as an input to each data frame from the `data` list-column.
 
 ## Data visualization
 
