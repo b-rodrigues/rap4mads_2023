@@ -174,7 +174,7 @@
     "href": "03-functional-programming.html#defining-your-own-functions",
     "title": "2  A primer on functional programming",
     "section": "2.2 Defining your own functions",
-    "text": "2.2 Defining your own functions\nLet’s first learn about actually writing functions. Read chapter 7 of my other book.\nThe most important concepts for this course are discussed in the following sections:\n\nfunctions that take functions as arguments (section 7.4)\n\n\n  🟡 Loading\n    webR...\n  \n    \n    \n      \n    \n  \n  \n  \n\n\n\nfunctions that take data (and the data’s columns) as arguments (section 7.6);\n\n\n  🟡 Loading\n    webR...",
+    "text": "2.2 Defining your own functions\nLet’s first learn about actually writing functions. Read chapter 7 of my other book.\nThe most important concepts for this course are discussed in the following sections:\n\nfunctions that take functions as arguments (section 7.4)\n\n\n  🟡 Loading\n    webR...\n  \n    \n    \n      \n    \n  \n  \n  \n\n\n\nfunctions that take data (and the data’s columns) as arguments (section 7.6);\n\n\n  🟡 Loading\n    webR...\n  \n    \n    \n      \n    \n  \n  \n  \n\n\nRead more about it here and here.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>A primer on functional programming</span>"
     ]
@@ -184,7 +184,7 @@
     "href": "03-functional-programming.html#functional-programming",
     "title": "2  A primer on functional programming",
     "section": "2.3 Functional programming",
-    "text": "2.3 Functional programming\nYou should ideally work through the whole of chapter 7, and then tackle chapter 8. What’s important there are:\n\npurrr::map(), purrr::reduce() (sections 8.3.1 and 8.3.2)\nAnd list based workflows (section 8.4)",
+    "text": "2.3 Functional programming\nYou should ideally work through the whole of chapter 7, and then tackle chapter 8. What’s important there are:\n\npurrr::map(), purrr::reduce() (sections 8.3.1 and 8.3.2)\n\nApply a function to each element of a vector or list:\n\n  🟡 Loading\n    webR...\n  \n    \n    \n      \n    \n  \n  \n  \n\n\n(lapply() is a base function that works similarly to purrr::map())\nReduce a vector to a single element by iteratively applying a function:\n\n  🟡 Loading\n    webR...\n  \n    \n    \n      \n    \n  \n  \n  \n\n\n\nAnd list based workflows (section 8.4)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>A primer on functional programming</span>"
     ]
