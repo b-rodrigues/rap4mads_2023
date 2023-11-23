@@ -80,9 +80,13 @@ the random numbers again:
 ```{webr-r}
 set.seed(1234)
 rnorm(10)
+```
 
+```{webr-r}
 rnorm(10)
+```
 
+```{webr-r}
 set.seed(1234)
 rnorm(10)
 ```
