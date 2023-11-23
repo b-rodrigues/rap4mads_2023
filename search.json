@@ -704,7 +704,7 @@
     "href": "11-nix.html#cicd-with-nix",
     "title": "10  Reproducibility with Nix",
     "section": "10.8 CI/CD with Nix",
-    "text": "10.8 CI/CD with Nix\nIt is also possible to run a {targets} pipeline on Github Actions quite easily. Run rix::tar_nix_ga() to add the file .github/workflows/run-pipeline.yaml to your project. Now, each time you push changes to your Github repository, the pipeline will be executed. Don’t forget to give read and write rights to the Github Actions bot. You will find the outputs of the pipeline in the targets-run branch of your repository.",
+    "text": "10.8 CI/CD with Nix\nIt is also possible to run a {targets} pipeline on Github Actions quite easily. Run rix::tar_nix_ga() to add the file .github/workflows/run-pipeline.yaml to your project. Now, each time you push changes to your Github repository, the pipeline will be executed. Don’t forget to give read and write rights to the Github Actions bot. You will find the outputs of the pipeline in the targets-run branch of your repository. See this repository for an example.",
     "crumbs": [
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Reproducibility with Nix</span>"
     ]
