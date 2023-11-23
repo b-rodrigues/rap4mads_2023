@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Building Reproducible Analytical Pipelines - 9&nbsp; (Very) basic CI/CD with Github Actions</title>
+<title>Building Reproducible Analytical Pipelines - 9&nbsp; Intro to CI/CD with Github Actions</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -84,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10-github_actions.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">(Very) basic CI/CD with Github Actions</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10-github_actions.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Intro to CI/CD with Github Actions</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -204,7 +204,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./10-github_actions.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">(Very) basic CI/CD with Github Actions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Intro to CI/CD with Github Actions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -237,7 +237,8 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">9.1</span> Introduction</a></li>
   <li><a href="#getting-your-repo-ready-for-github-actions" id="toc-getting-your-repo-ready-for-github-actions" class="nav-link" data-scroll-target="#getting-your-repo-ready-for-github-actions"><span class="header-section-number">9.2</span> Getting your repo ready for Github Actions</a></li>
-  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">9.3</span> Further reading</a></li>
+  <li><a href="#building-a-docker-image-and-pushing-it-to-a-registry" id="toc-building-a-docker-image-and-pushing-it-to-a-registry" class="nav-link" data-scroll-target="#building-a-docker-image-and-pushing-it-to-a-registry"><span class="header-section-number">9.3</span> Building a Docker image and pushing it to a registry</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">9.4</span> Further reading</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/b-rodrigues/rap4mads_2023/edit/main/10-github_actions.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -246,7 +247,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">(Very) basic CI/CD with Github Actions</span></h1>
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Intro to CI/CD with Github Actions</span></h1>
 </div>
 
 
@@ -273,8 +274,8 @@ ul.task-list li input[type="checkbox"] {
 <p>What you’ll have learned by the end of the chapter: very basic knowledge of Github Actions, but enough to run your RAP in the cloud.</p>
 <section id="introduction" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">9.1</span> Introduction</h2>
-<p>We are almost at the end; actually, we could have stopped at the end of the previous chapter. We have reached our goal; we are able to run pipeline in a 100% reproducible way. However, this requires some manual steps. And maybe that’s not a problem; if your image is done, and users only need to pull it and run the container, that’s not really a big problem. But you should keep in mind that manual steps don’t scale. Let’s imagine another context; let’s suppose that you are part of a company and that you are part of a team that needs to quickly ship products to clients. Maybe several people contribute to the product using, an internal version control solution (like a Gitlab instance that is deployed on the premises of your company). Maybe you even need to work on several products in the same day; you (and your teammates) should only be focusing writing code (and <code>Dockerfiles</code>)… your time and resources cannot get clogged by building images (which depending on what you’re working on, can take quite some time). So ideally, we would want to offload these step. That is what we are going to learn it. I should also note that this is going to be the shortest chapter of this course. I’m not an expert on CI/CD with Github Actions, but wanted to show to you, first of all, that this exists, and second of all, how you could get started.</p>
-<p>So consider this chapter a very basic intro to CI/CD (Continuous Integration and Continuous Deployment/Delivery) and DevOps. In fact, to be more precise, we should be talking about GitOps. What’s Dev(Git)Ops? I think that the <a href="https://www.atlassian.com/devops">Atlassian</a> page on DevOps makes a good job of explaining it. The bottom line is that DevOps makes it easy for developers to focus on coding, and make it easy for them to ship data products. The core IT team provides the required infrastructure and tools to make this possible. GitOps is a variant of DevOps where the definition of the infrastructure is versioned, and can be changed by editing simple text files. Through events, such as pushing to the repository, new images can be built, or containers executed. Data products can then also be redeployed automatically. All the steps we’ve been doing manually, with one simple push! It’s also possible, in the context of package development, to execute unit tests when code gets pushed to repo, or get documentation and vignettes compiled. This also means that you could be developing on a very thin client with only a text editor and git installed. Pushing to Github would then execute everything needed to have a package ready for sharing.</p>
+<p>We are almost at the end; actually, we could have stopped at the end of the previous chapter. We have reached our goal; we are able to run pipeline in a 100% reproducible way. However, this requires some manual steps. And maybe that’s not a problem; if your image is done, and users only need to pull it and run the container, that’s not really a big problem. But you should keep in mind that manual steps don’t scale. Let’s imagine another context; let’s suppose that you are part of a company and that you are part of a team that needs to quickly ship products to clients. Maybe several people contribute to the product using an internal version control solution (like a Gitlab instance that is deployed on the premises of your company). Maybe you even need to work on several products in the same day; you (and your teammates) should only be focusing writing code (and <code>Dockerfiles</code>)… your time and resources cannot get clogged by building images (which depending on what you’re working on, can take quite some time). So ideally, we would want to automate this step. That is what we are going to learn in this chapter.</p>
+<p>This chapter will introduce you to the basic ideas of CI/CD (Continuous Integration and Continuous Deployment/Delivery) and DevOps with Github Actions. Because we’re using Git to trigger all the events and automate the whole pipeline, this can also be referred to as GitOps. What’s Dev(Git)Ops? I think that the <a href="https://www.atlassian.com/devops">Atlassian</a> page on DevOps makes a good job of explaining it. The bottom line is that DevOps makes it easy for developers to focus on coding, and makes it easy for them to ship data products. The core IT team provides the required infrastructure and tools to make this possible. GitOps is a variant of DevOps where the definition of the infrastructure is versioned, and can be changed by editing simple text files. Through events, such as pushing to the repository, new images can be built, or containers executed. Data products can then also be redeployed automatically. All the steps we’ve been doing manually, with one simple push! It’s also possible, in the context of package development, to execute unit tests when code gets pushed to repo, or get documentation and vignettes compiled. This also means that you could be developing on a very thin client with only a text editor and git installed. Pushing to Github would then execute everything needed to have a package ready for sharing.</p>
 <p>So our goal here is, in short, to do exactly the same as what we have been doing on our computer (so build an image, run a container, and get back 3 plots), but on Github.</p>
 </section>
 <section id="getting-your-repo-ready-for-github-actions" class="level2" data-number="9.2">
@@ -359,7 +360,7 @@ jobs:
 <div style="text-align:center;">
 <p><video width="640" height="480" controls=""> <source src="img/ga_2.mp4" type="video/mp4"> </video></p>
 </div>
-<p>As you can see from the video above, a zip file is now available and can be downloaded. This zip contains our plots! It is thus possible to rerun our workflow in the cloud. This has the advantage that we can now focus on simply changing the code, and not have to bother with useless manual steps. For example, let’s change this target in the <code>_targets.R</code> file:</p>
+<p>As you can see from the video above, a zip file is now available and can be downloaded. This zip contains our plots! It is thus possible to rerun our workflow in the cloud. This has the advantage that we can now focus on simply changing the code, and not have to bother with boring manual steps. For example, let’s change this target in the <code>_targets.R</code> file:</p>
 <pre><code>tar_target(
     commune_data,
     clean_unemp(unemp_data,
@@ -376,8 +377,12 @@ jobs:
 <p>As you can see in the video, the <code>_targets.R</code> script was changed, and the changes pushed to Github. This triggered the action we’ve defined before. The plots (artifacts) get refreshed, and we can download them. We see then that Dudelange was added in the <code>communes.png</code> plot!</p>
 <p>It is also possible to “deploy” the plots directly to another branch, and do much, much more. I just wanted to give you a little taste of Github Actions (and more generally GitOps). The possibilities are virtually limitless, and I still can’t get over the fact that Github Actions is free (well, up to <a href="https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions">2000 compute minutes and 500MB storage per month</a>).</p>
 </section>
-<section id="further-reading" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">9.3</span> Further reading</h2>
+<section id="building-a-docker-image-and-pushing-it-to-a-registry" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="building-a-docker-image-and-pushing-it-to-a-registry"><span class="header-section-number">9.3</span> Building a Docker image and pushing it to a registry</h2>
+<p>It is also possible to build a Docker image and have it made available on an image registry. You can see how this works on this <a href="https://github.com/b-rodrigues/ga_demo">repository</a>. This images can then be used as a base for other RAPs, as in this <a href="https://github.com/b-rodrigues/ga_demo_rap/tree/main">repository</a>. Why do this? Well because of “separation of concerns”. You could have a repository which builds in image containing your development environment: this could be an image with a specific version of R and R packages. And then have as many repositories as projects that run RAPs using that development environment image as a basis. Simply add the project-specific packages that you need for each project.</p>
+</section>
+<section id="further-reading" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">9.4</span> Further reading</h2>
 <ul>
 <li>http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/</li>
 <li>https://orchid00.github.io/actions_sandbox/</li>
