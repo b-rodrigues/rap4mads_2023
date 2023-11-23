@@ -916,8 +916,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `
-x <- 1`,
+      value: `x <- 1`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -1196,8 +1195,7 @@ x <- 1`,
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `
-x + 1`,
+      value: `x + 1`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -2037,11 +2035,6 @@ rnorm(n = 10)`,
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
       value: `set.seed(1234)
-rnorm(10)
-
-rnorm(10)
-
-set.seed(1234)
 rnorm(10)`,
       language: 'r',
       theme: 'vs-light',
@@ -2297,7 +2290,6 @@ rnorm(10)`,
     executeCode(editor.getValue());
   };
 </script>
-<p>The problem with <code>set.seed()</code> is that you only partially solve the problem of <code>rnorm()</code> not being pure; this is because while <code>rnorm()</code> now does return the same output for the same input, this only works if you manipulate the state of your program to change the seed beforehand. Ideally, we would like to have a pure version of <code>rnorm()</code>, which would be self-contained and not depend on the value of the seed defined in the global environment. There is a package developped by Posit (the makers of RStudio and the packages from the <em>tidyverse</em>), called <code>{withr}</code> which allows to rewrite our functions in a pure way. <code>{withr}</code> has several functions, all starting with <code>with_</code> that allow users to run code with some temporary defined variables, without altering the global environment. For example, it is possible to run a <code>rnorm()</code> with a seed, using <code>withr::with_seed()</code>:</p>
 <div id="qwebr-interactive-area-7" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-7">🟡 Loading
     webR...</button>
@@ -2321,11 +2313,7 @@ rnorm(10)`,
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `library(withr)
-
-with_seed(seed = 1234, {
-  rnorm(10)
-})`,
+      value: `rnorm(10)`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -2580,7 +2568,6 @@ with_seed(seed = 1234, {
     executeCode(editor.getValue());
   };
 </script>
-<p>But ideally you’d want to go a step further and define a new function that is pure. To turn an impure function into a pure function, you usually only need to add some arguments to it. This is how we would create a <code>pure_rnorm()</code> function:</p>
 <div id="qwebr-interactive-area-8" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-8">🟡 Loading
     webR...</button>
@@ -2604,12 +2591,8 @@ with_seed(seed = 1234, {
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `pure_rnorm <- function(..., seed){
-
-  with_seed(seed, rnorm(...))
-}
-
-pure_rnorm(10, seed = 1234)`,
+      value: `set.seed(1234)
+rnorm(10)`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -2864,20 +2847,7 @@ pure_rnorm(10, seed = 1234)`,
     executeCode(editor.getValue());
   };
 </script>
-<p><code>pure_rnorm()</code> is now self-contained, and does not pollute the global environment. We’re going to learn how to write functions in just a bit, so don’t worry if the code above does not make sense yet.</p>
-<div style="text-align:center;">
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="img/cat_loops.png" class="img-fluid"></p>
-</div>
-</div>
-</div>
-<p>A very practical consequence of using functional programming is that loops are not used, because loops are imperative and imperative programming is all about manipulating state. However, there are situations where loops are more efficient than the alternative (in R at least). So we will still learn and use them, but only when absolutely necessary, and we will always encapsulate a loop inside a function. Just like with the example above, this ensures that we have a pure, self-contained function that we can reason about easily. What I mean by this, is that loops are not always very easy to decipher. The concept of loops is simple enough: take this instruction, and repeat it N times. But in practice, if you’re reading code, it is not possible to understand what a loop is doing at first glance. There are only two solutions in this case:</p>
-<ul>
-<li>you’re lucky and there are comments that explain what the loop is doing;</li>
-<li>you have to let the loop run either in your head or in a console with some examples to really understand whit is going on.</li>
-</ul>
-<p>For example, consider the following code:</p>
+<p>The problem with <code>set.seed()</code> is that you only partially solve the problem of <code>rnorm()</code> not being pure; this is because while <code>rnorm()</code> now does return the same output for the same input, this only works if you manipulate the state of your program to change the seed beforehand. Ideally, we would like to have a pure version of <code>rnorm()</code>, which would be self-contained and not depend on the value of the seed defined in the global environment. There is a package developped by Posit (the makers of RStudio and the packages from the <em>tidyverse</em>), called <code>{withr}</code> which allows to rewrite our functions in a pure way. <code>{withr}</code> has several functions, all starting with <code>with_</code> that allow users to run code with some temporary defined variables, without altering the global environment. For example, it is possible to run a <code>rnorm()</code> with a seed, using <code>withr::with_seed()</code>:</p>
 <div id="qwebr-interactive-area-9" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-9">🟡 Loading
     webR...</button>
@@ -2901,40 +2871,11 @@ pure_rnorm(10, seed = 1234)`,
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `library(dplyr)
+      value: `library(withr)
 
-data(starwars)
-
-sum_humans <- 0
-sum_others <- 0
-n_humans <- 0
-n_others <- 0
-
-for(i in seq_along(1:nrow(starwars))){
-
-  if(!is.na(unlist(starwars[i, "species"])) &
-     unlist(starwars[i, "species"]) == "Human"){
-    if(!is.na(unlist(starwars[i, "height"]))){
-      sum_humans <- sum_humans + unlist(starwars[i, "height"])
-      n_humans <- n_humans + 1
-    } else {
-
-      0
-
-    }
-
-  } else {
-    if(!is.na(unlist(starwars[i, "height"]))){
-      sum_others <- sum_others + unlist(starwars[i, "height"])
-      n_others <- n_others + 1
-    } else {
-      0
-    }
-  }
-}
-
-mean_height_humans <- sum_humans/n_humans
-mean_height_others <- sum_others/n_others`,
+with_seed(seed = 1234, {
+  rnorm(10)
+})`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -3189,7 +3130,7 @@ mean_height_others <- sum_others/n_others`,
     executeCode(editor.getValue());
   };
 </script>
-<p>What this does is not immediately obvious. The only hint you get are the two last lines, where you can read that we compute the average height for humans and non-humans in the sample. And this code could look a lot worse, because I am using functions like <code>is.na()</code> to test if a value is <code>NA</code> or not, and I’m using <code>unlist()</code> as well. If you compare this mess to a functional approach, I hope that I can stop my diatribe against imperative style programming here:</p>
+<p>But ideally you’d want to go a step further and define a new function that is pure. To turn an impure function into a pure function, you usually only need to add some arguments to it. This is how we would create a <code>pure_rnorm()</code> function:</p>
 <div id="qwebr-interactive-area-10" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-10">🟡 Loading
     webR...</button>
@@ -3213,9 +3154,12 @@ mean_height_others <- sum_others/n_others`,
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `starwars %>%
-  group_by(is_human = species == "Human") %>%
-  summarise(mean_height = mean(height, na.rm = TRUE))`,
+      value: `pure_rnorm <- function(..., seed){
+
+  with_seed(seed, rnorm(...))
+}
+
+pure_rnorm(10, seed = 1234)`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -3470,14 +3414,20 @@ mean_height_others <- sum_others/n_others`,
     executeCode(editor.getValue());
   };
 </script>
-<p>Not only is this shorter, it doesn’t even need any comments to explain what’s going on. If you’re using functions with explicit names, the code becomes self-explanatory.</p>
-<p>The other advantage of a functional (also called declarative) programming style is that you get function composition for free. Function composition is an operation that takes two functions <em>g</em> and <em>f</em> and returns a new function <em>h</em> such that <span class="math inline">\(h(x) = g(f(x))\)</span>. Formally:</p>
-<pre><code>h = g ∘ f such that h(x) = g(f(x))</code></pre>
-<p><code>∘</code> is the composition operator. You can read <code>g ∘ f</code> as <em>g after f</em>. When using functional programming, you can compose functions very easily, simply by using <code>|&gt;</code> or <code>%&gt;%</code>:</p>
+<p><code>pure_rnorm()</code> is now self-contained, and does not pollute the global environment. We’re going to learn how to write functions in just a bit, so don’t worry if the code above does not make sense yet.</p>
+<div style="text-align:center;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> f <span class="sc">|&gt;</span> g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="img/cat_loops.png" class="img-fluid"></p>
 </div>
-<p><code>f |&gt; g</code> can be read as <em>f then g</em>, which is equivalent to <em>g after f</em>. Function composition might not seem like a big deal, but it actually is. If we structure our programs in this way, as a sequence of function calls, we get many benefits. Functions are easy to test, document, maintain, share and can be composed. This allows us to very succintly express complex workflows:</p>
+</div>
+</div>
+<p>A very practical consequence of using functional programming is that loops are not used, because loops are imperative and imperative programming is all about manipulating state. However, there are situations where loops are more efficient than the alternative (in R at least). So we will still learn and use them, but only when absolutely necessary, and we will always encapsulate a loop inside a function. Just like with the example above, this ensures that we have a pure, self-contained function that we can reason about easily. What I mean by this, is that loops are not always very easy to decipher. The concept of loops is simple enough: take this instruction, and repeat it N times. But in practice, if you’re reading code, it is not possible to understand what a loop is doing at first glance. There are only two solutions in this case:</p>
+<ul>
+<li>you’re lucky and there are comments that explain what the loop is doing;</li>
+<li>you have to let the loop run either in your head or in a console with some examples to really understand whit is going on.</li>
+</ul>
+<p>For example, consider the following code:</p>
 <div id="qwebr-interactive-area-11" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-11">🟡 Loading
     webR...</button>
@@ -3501,20 +3451,40 @@ mean_height_others <- sum_others/n_others`,
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `starwars %>%
-  filter(skin_color == "light") %>%
-  select(species, sex, mass) %>%
-  group_by(sex, species) %>%
-  summarise(
-    total_individuals = n(),
-    min_mass = min(mass, na.rm = TRUE),
-    mean_mass = mean(mass, na.rm = TRUE),
-    sd_mass = sd(mass, na.rm = TRUE),
-    max_mass = max(mass, na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  select(-species) %>%
-  tidyr::pivot_longer(-sex, names_to = "statistic", values_to = "value")`,
+      value: `library(dplyr)
+
+data(starwars)
+
+sum_humans <- 0
+sum_others <- 0
+n_humans <- 0
+n_others <- 0
+
+for(i in seq_along(1:nrow(starwars))){
+
+  if(!is.na(unlist(starwars[i, "species"])) &
+     unlist(starwars[i, "species"]) == "Human"){
+    if(!is.na(unlist(starwars[i, "height"]))){
+      sum_humans <- sum_humans + unlist(starwars[i, "height"])
+      n_humans <- n_humans + 1
+    } else {
+
+      0
+
+    }
+
+  } else {
+    if(!is.na(unlist(starwars[i, "height"]))){
+      sum_others <- sum_others + unlist(starwars[i, "height"])
+      n_others <- n_others + 1
+    } else {
+      0
+    }
+  }
+}
+
+mean_height_humans <- sum_humans/n_humans
+mean_height_others <- sum_others/n_others`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -3747,6 +3717,586 @@ mean_height_others <- sum_others/n_others`,
           pre_pager.innerText = paged_data;
           pre_pager.classList.add("qwebr-output-code-pager");
           pre_pager.setAttribute("id", "qwebr-output-code-pager-editor-11-result-" + (index + 1));
+          outputCodeDiv.appendChild(pre_pager);
+        });
+      }
+    } finally {
+      // Clean up the remaining code
+      webRCodeShelter.purge();
+    }
+
+    // Switch to allowing execution of code
+    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+      btn.disabled = false;
+    });
+
+    // Revert to the initial code cell state
+    runButton.innerHTML = '<i class="fa-solid fa-play qwebr-icon-run-code"></i> <span>Run Code</span>';
+  }
+
+  // Add a click event listener to the run button
+  runButton.onclick = function () {
+    executeCode(editor.getValue());
+  };
+</script>
+<p>What this does is not immediately obvious. The only hint you get are the two last lines, where you can read that we compute the average height for humans and non-humans in the sample. And this code could look a lot worse, because I am using functions like <code>is.na()</code> to test if a value is <code>NA</code> or not, and I’m using <code>unlist()</code> as well. If you compare this mess to a functional approach, I hope that I can stop my diatribe against imperative style programming here:</p>
+<div id="qwebr-interactive-area-12" class="qwebr-interactive-area">
+  <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-12">🟡 Loading
+    webR...</button>
+  <div id="qwebr-console-area-12" class="qwebr-console-area">
+    <div id="qwebr-editor-12" class="qwebr-editor"></div>
+    <div id="qwebr-output-code-area-12" class="qwebr-output-code-area" aria-live="assertive">
+      <pre style="visibility: hidden"></pre>
+    </div>
+  </div>
+  <div id="qwebr-output-graph-area-12" class="qwebr-output-graph-area">
+  </div>
+</div>
+<script type="module">
+  // Retrieve webR code cell information
+  const runButton = document.getElementById("qwebr-button-run-12");
+  const outputCodeDiv = document.getElementById("qwebr-output-code-area-12");
+  const editorDiv = document.getElementById("qwebr-editor-12");
+  const outputGraphDiv = document.getElementById("qwebr-output-graph-area-12");
+
+  // Load the Monaco Editor and create an instance
+  let editor;
+  require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(editorDiv, {
+      value: `starwars %>%
+  group_by(is_human = species == "Human") %>%
+  summarise(mean_height = mean(height, na.rm = TRUE))`,
+      language: 'r',
+      theme: 'vs-light',
+      automaticLayout: true,           // TODO: Could be problematic for slide decks
+      scrollBeyondLastLine: false,
+      minimap: {
+        enabled: false
+      },
+      fontSize: '17.5pt',               // Bootstrap is 1 rem
+      renderLineHighlight: "none",     // Disable current line highlighting
+      hideCursorInOverviewRuler: true  // Remove cursor indictor in right hand side scroll bar
+    });
+
+    // Dynamically modify the height of the editor window if new lines are added.
+    let ignoreEvent = false;
+    const updateHeight = () => {
+      const contentHeight = editor.getContentHeight();
+      // We're avoiding a width change
+      //editorDiv.style.width = `${width}px`;
+      editorDiv.style.height = `${contentHeight}px`;
+      try {
+        ignoreEvent = true;
+
+        // The key to resizing is this call
+        editor.layout();
+      } finally {
+        ignoreEvent = false;
+      }
+    };
+
+    // Helper function to check if selected text is empty
+    function isEmptyCodeText(selectedCodeText) {
+      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
+    }
+
+    // Registry of keyboard shortcuts that should be re-added to each editor window
+    // when focus changes.
+    const addWebRKeyboardShortCutCommands = () => {
+      // Add a keydown event listener for Shift+Enter to run all code in cell
+      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+
+        // Retrieve all text inside the editor
+        executeCode(editor.getValue());
+      });
+
+      // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+
+        // Get the selected text from the editor
+        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
+        // Check if no code is selected
+        if (isEmptyCodeText(selectedText)) {
+          // Obtain the current cursor position
+          let currentPosition = editor.getPosition();
+          // Retrieve the current line content
+          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
+
+          // Propose a new position to move the cursor to
+          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
+
+          // Check if the new position is beyond the last line of the editor
+          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
+            // Add a new line at the end of the editor
+            editor.executeEdits("addNewLine", [{
+            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
+            text: "\n", 
+            forceMoveMarkers: true,
+            }]);
+          }
+          
+          // Run the entire line of code.
+          executeCode(currentLine);
+
+          // Move cursor to new position
+          editor.setPosition(newPosition);
+        } else {
+          // Code to run when Ctrl+Enter is pressed with selected code
+          executeCode(selectedText);
+        }
+      });
+    }
+
+    // Register an on focus event handler for when a code cell is selected to update
+    // what keyboard shortcut commands should work.
+    // This is a workaround to fix a regression that happened with multiple
+    // editor windows since Monaco 0.32.0 
+    // https://github.com/microsoft/monaco-editor/issues/2947
+    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
+
+    // Register an on change event for when new code is added to the editor window
+    editor.onDidContentSizeChange(updateHeight);
+
+    // Manually re-update height to account for the content we inserted into the call
+    updateHeight();
+  });
+
+  // Function to execute the code (accepts code as an argument)
+  async function executeCode(codeToRun) {
+
+    // Disallowing execution of other code cells
+    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+      btn.disabled = true;
+    });
+
+    // Emphasize the active code cell
+    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Run Code</span>';
+
+    // Create a canvas variable for graphics
+    let canvas = undefined;
+
+    // Create a pager variable for help/file contents
+    let pager = [];
+
+    // Process 
+    async function parseTypePager(msg) { 
+
+        // Split out the event data
+        const { path, title, deleteFile } = msg.data; 
+
+        // Process the pager data by reading the information from disk
+        const paged_data = await webR.FS.readFile(path).then((data) => {
+          // Obtain the file content
+          let content = new TextDecoder().decode(data);
+
+          // Remove excessive backspace characters until none remain
+          while(content.match(/.[\b]/)){
+            content = content.replace(/.[\b]/g, '');
+          }
+
+          // Returned cleaned data
+          return content;
+        });
+
+        // Unlink file if needed
+        if (deleteFile) { 
+          await webR.FS.unlink(path); 
+        } 
+
+        // Return extracted data with spaces
+        return paged_data;
+    } 
+
+    // Initialize webR
+    await webR.init();
+
+    // Setup a webR canvas by making a namespace call into the {webr} package
+    await webR.evalRVoid("webr::canvas(width=504, height=360)");
+
+    // Capture output data from evaluating the code
+    const result = await webRCodeShelter.captureR(codeToRun, {
+      withAutoprint: true,
+      captureStreams: true,
+      captureConditions: false//,
+      // env: webR.objs.emptyEnv, // maintain a global environment for webR v0.2.0
+    });
+
+    // Start attempting to parse the result data
+    try {
+
+      // Stop creating images
+      await webR.evalRVoid("dev.off()");
+
+      // Merge output streams of STDOUT and STDErr (messages and errors are combined.)
+      const out = result.output
+        .filter(evt => evt.type === "stdout" || evt.type === "stderr")
+        .map((evt, index) => {
+          const className = `qwebr-output-code-${evt.type}`;
+          return `<code id="${className}-editor-12-result-${index + 1}" class="${className}">${evt.data}</code>`;
+        })
+        .join("\n");
+
+
+      // Clean the state
+      const msgs = await webR.flush();
+
+      // Output each image event stored
+      msgs.forEach((msg) => {
+        // Determine if old canvas can be used or a new canvas is required.
+        if (msg.type === 'canvas'){
+          // Add image to the current canvas
+          if (msg.data.event === 'canvasImage') {
+            canvas.getContext('2d').drawImage(msg.data.image, 0, 0);
+          } else if (msg.data.event === 'canvasNewPage') {
+            // Generate a new canvas element
+            canvas = document.createElement("canvas");
+            canvas.setAttribute("width", 2 * 504);
+            canvas.setAttribute("height", 2 * 360);
+            canvas.style.width = "700px";
+            canvas.style.display = "block";
+            canvas.style.margin = "auto";
+          }
+        } 
+      });
+
+      // Use `map` to process the filtered "pager" events asynchronously
+      const pager = await Promise.all(
+        msgs.filter(msg => msg.type === 'pager').map(
+          async (msg) => {
+            return await parseTypePager(msg);
+          }
+        )
+      );
+
+      // Nullify the output area of content
+      outputCodeDiv.innerHTML = "";
+      outputGraphDiv.innerHTML = "";
+
+      // Design an output object for messages
+      const pre = document.createElement("pre");
+      if (/\S/.test(out)) {
+        // Display results as HTML elements to retain output styling
+        const div = document.createElement("div");
+        div.innerHTML = out;
+        pre.appendChild(div);
+      } else {
+        // If nothing is present, hide the element.
+        pre.style.visibility = "hidden";
+      }
+      outputCodeDiv.appendChild(pre);
+
+      // Place the graphics on the canvas
+      if (canvas) {
+        outputGraphDiv.appendChild(canvas);
+      }
+
+      // Display the pager data
+      if (pager) {
+        // Use the `pre` element to preserve whitespace.
+        pager.forEach((paged_data, index) => {
+          let pre_pager = document.createElement("pre");
+          pre_pager.innerText = paged_data;
+          pre_pager.classList.add("qwebr-output-code-pager");
+          pre_pager.setAttribute("id", "qwebr-output-code-pager-editor-12-result-" + (index + 1));
+          outputCodeDiv.appendChild(pre_pager);
+        });
+      }
+    } finally {
+      // Clean up the remaining code
+      webRCodeShelter.purge();
+    }
+
+    // Switch to allowing execution of code
+    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+      btn.disabled = false;
+    });
+
+    // Revert to the initial code cell state
+    runButton.innerHTML = '<i class="fa-solid fa-play qwebr-icon-run-code"></i> <span>Run Code</span>';
+  }
+
+  // Add a click event listener to the run button
+  runButton.onclick = function () {
+    executeCode(editor.getValue());
+  };
+</script>
+<p>Not only is this shorter, it doesn’t even need any comments to explain what’s going on. If you’re using functions with explicit names, the code becomes self-explanatory.</p>
+<p>The other advantage of a functional (also called declarative) programming style is that you get function composition for free. Function composition is an operation that takes two functions <em>g</em> and <em>f</em> and returns a new function <em>h</em> such that <span class="math inline">\(h(x) = g(f(x))\)</span>. Formally:</p>
+<pre><code>h = g ∘ f such that h(x) = g(f(x))</code></pre>
+<p><code>∘</code> is the composition operator. You can read <code>g ∘ f</code> as <em>g after f</em>. When using functional programming, you can compose functions very easily, simply by using <code>|&gt;</code> or <code>%&gt;%</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> f <span class="sc">|&gt;</span> g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>f |&gt; g</code> can be read as <em>f then g</em>, which is equivalent to <em>g after f</em>. Function composition might not seem like a big deal, but it actually is. If we structure our programs in this way, as a sequence of function calls, we get many benefits. Functions are easy to test, document, maintain, share and can be composed. This allows us to very succintly express complex workflows:</p>
+<div id="qwebr-interactive-area-13" class="qwebr-interactive-area">
+  <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-13">🟡 Loading
+    webR...</button>
+  <div id="qwebr-console-area-13" class="qwebr-console-area">
+    <div id="qwebr-editor-13" class="qwebr-editor"></div>
+    <div id="qwebr-output-code-area-13" class="qwebr-output-code-area" aria-live="assertive">
+      <pre style="visibility: hidden"></pre>
+    </div>
+  </div>
+  <div id="qwebr-output-graph-area-13" class="qwebr-output-graph-area">
+  </div>
+</div>
+<script type="module">
+  // Retrieve webR code cell information
+  const runButton = document.getElementById("qwebr-button-run-13");
+  const outputCodeDiv = document.getElementById("qwebr-output-code-area-13");
+  const editorDiv = document.getElementById("qwebr-editor-13");
+  const outputGraphDiv = document.getElementById("qwebr-output-graph-area-13");
+
+  // Load the Monaco Editor and create an instance
+  let editor;
+  require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(editorDiv, {
+      value: `starwars %>%
+  filter(skin_color == "light") %>%
+  select(species, sex, mass) %>%
+  group_by(sex, species) %>%
+  summarise(
+    total_individuals = n(),
+    min_mass = min(mass, na.rm = TRUE),
+    mean_mass = mean(mass, na.rm = TRUE),
+    sd_mass = sd(mass, na.rm = TRUE),
+    max_mass = max(mass, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  select(-species) %>%
+  tidyr::pivot_longer(-sex, names_to = "statistic", values_to = "value")`,
+      language: 'r',
+      theme: 'vs-light',
+      automaticLayout: true,           // TODO: Could be problematic for slide decks
+      scrollBeyondLastLine: false,
+      minimap: {
+        enabled: false
+      },
+      fontSize: '17.5pt',               // Bootstrap is 1 rem
+      renderLineHighlight: "none",     // Disable current line highlighting
+      hideCursorInOverviewRuler: true  // Remove cursor indictor in right hand side scroll bar
+    });
+
+    // Dynamically modify the height of the editor window if new lines are added.
+    let ignoreEvent = false;
+    const updateHeight = () => {
+      const contentHeight = editor.getContentHeight();
+      // We're avoiding a width change
+      //editorDiv.style.width = `${width}px`;
+      editorDiv.style.height = `${contentHeight}px`;
+      try {
+        ignoreEvent = true;
+
+        // The key to resizing is this call
+        editor.layout();
+      } finally {
+        ignoreEvent = false;
+      }
+    };
+
+    // Helper function to check if selected text is empty
+    function isEmptyCodeText(selectedCodeText) {
+      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
+    }
+
+    // Registry of keyboard shortcuts that should be re-added to each editor window
+    // when focus changes.
+    const addWebRKeyboardShortCutCommands = () => {
+      // Add a keydown event listener for Shift+Enter to run all code in cell
+      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+
+        // Retrieve all text inside the editor
+        executeCode(editor.getValue());
+      });
+
+      // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+
+        // Get the selected text from the editor
+        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
+        // Check if no code is selected
+        if (isEmptyCodeText(selectedText)) {
+          // Obtain the current cursor position
+          let currentPosition = editor.getPosition();
+          // Retrieve the current line content
+          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
+
+          // Propose a new position to move the cursor to
+          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
+
+          // Check if the new position is beyond the last line of the editor
+          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
+            // Add a new line at the end of the editor
+            editor.executeEdits("addNewLine", [{
+            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
+            text: "\n", 
+            forceMoveMarkers: true,
+            }]);
+          }
+          
+          // Run the entire line of code.
+          executeCode(currentLine);
+
+          // Move cursor to new position
+          editor.setPosition(newPosition);
+        } else {
+          // Code to run when Ctrl+Enter is pressed with selected code
+          executeCode(selectedText);
+        }
+      });
+    }
+
+    // Register an on focus event handler for when a code cell is selected to update
+    // what keyboard shortcut commands should work.
+    // This is a workaround to fix a regression that happened with multiple
+    // editor windows since Monaco 0.32.0 
+    // https://github.com/microsoft/monaco-editor/issues/2947
+    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
+
+    // Register an on change event for when new code is added to the editor window
+    editor.onDidContentSizeChange(updateHeight);
+
+    // Manually re-update height to account for the content we inserted into the call
+    updateHeight();
+  });
+
+  // Function to execute the code (accepts code as an argument)
+  async function executeCode(codeToRun) {
+
+    // Disallowing execution of other code cells
+    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+      btn.disabled = true;
+    });
+
+    // Emphasize the active code cell
+    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Run Code</span>';
+
+    // Create a canvas variable for graphics
+    let canvas = undefined;
+
+    // Create a pager variable for help/file contents
+    let pager = [];
+
+    // Process 
+    async function parseTypePager(msg) { 
+
+        // Split out the event data
+        const { path, title, deleteFile } = msg.data; 
+
+        // Process the pager data by reading the information from disk
+        const paged_data = await webR.FS.readFile(path).then((data) => {
+          // Obtain the file content
+          let content = new TextDecoder().decode(data);
+
+          // Remove excessive backspace characters until none remain
+          while(content.match(/.[\b]/)){
+            content = content.replace(/.[\b]/g, '');
+          }
+
+          // Returned cleaned data
+          return content;
+        });
+
+        // Unlink file if needed
+        if (deleteFile) { 
+          await webR.FS.unlink(path); 
+        } 
+
+        // Return extracted data with spaces
+        return paged_data;
+    } 
+
+    // Initialize webR
+    await webR.init();
+
+    // Setup a webR canvas by making a namespace call into the {webr} package
+    await webR.evalRVoid("webr::canvas(width=504, height=360)");
+
+    // Capture output data from evaluating the code
+    const result = await webRCodeShelter.captureR(codeToRun, {
+      withAutoprint: true,
+      captureStreams: true,
+      captureConditions: false//,
+      // env: webR.objs.emptyEnv, // maintain a global environment for webR v0.2.0
+    });
+
+    // Start attempting to parse the result data
+    try {
+
+      // Stop creating images
+      await webR.evalRVoid("dev.off()");
+
+      // Merge output streams of STDOUT and STDErr (messages and errors are combined.)
+      const out = result.output
+        .filter(evt => evt.type === "stdout" || evt.type === "stderr")
+        .map((evt, index) => {
+          const className = `qwebr-output-code-${evt.type}`;
+          return `<code id="${className}-editor-13-result-${index + 1}" class="${className}">${evt.data}</code>`;
+        })
+        .join("\n");
+
+
+      // Clean the state
+      const msgs = await webR.flush();
+
+      // Output each image event stored
+      msgs.forEach((msg) => {
+        // Determine if old canvas can be used or a new canvas is required.
+        if (msg.type === 'canvas'){
+          // Add image to the current canvas
+          if (msg.data.event === 'canvasImage') {
+            canvas.getContext('2d').drawImage(msg.data.image, 0, 0);
+          } else if (msg.data.event === 'canvasNewPage') {
+            // Generate a new canvas element
+            canvas = document.createElement("canvas");
+            canvas.setAttribute("width", 2 * 504);
+            canvas.setAttribute("height", 2 * 360);
+            canvas.style.width = "700px";
+            canvas.style.display = "block";
+            canvas.style.margin = "auto";
+          }
+        } 
+      });
+
+      // Use `map` to process the filtered "pager" events asynchronously
+      const pager = await Promise.all(
+        msgs.filter(msg => msg.type === 'pager').map(
+          async (msg) => {
+            return await parseTypePager(msg);
+          }
+        )
+      );
+
+      // Nullify the output area of content
+      outputCodeDiv.innerHTML = "";
+      outputGraphDiv.innerHTML = "";
+
+      // Design an output object for messages
+      const pre = document.createElement("pre");
+      if (/\S/.test(out)) {
+        // Display results as HTML elements to retain output styling
+        const div = document.createElement("div");
+        div.innerHTML = out;
+        pre.appendChild(div);
+      } else {
+        // If nothing is present, hide the element.
+        pre.style.visibility = "hidden";
+      }
+      outputCodeDiv.appendChild(pre);
+
+      // Place the graphics on the canvas
+      if (canvas) {
+        outputGraphDiv.appendChild(canvas);
+      }
+
+      // Display the pager data
+      if (pager) {
+        // Use the `pre` element to preserve whitespace.
+        pager.forEach((paged_data, index) => {
+          let pre_pager = document.createElement("pre");
+          pre_pager.innerText = paged_data;
+          pre_pager.classList.add("qwebr-output-code-pager");
+          pre_pager.setAttribute("id", "qwebr-output-code-pager-editor-13-result-" + (index + 1));
           outputCodeDiv.appendChild(pre_pager);
         });
       }
