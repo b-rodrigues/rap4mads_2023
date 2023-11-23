@@ -104,7 +104,7 @@ While optional, the concept of list-columns is quite powerful and I wanted to sa
 of the `starwars` dataset:
 
 ```{webr-r}
-str(starwars)
+str(head(starwars, 9))
 ```
 
 Each of the elements of the column `films` is a list. For example:
@@ -112,8 +112,7 @@ Each of the elements of the column `films` is a list. For example:
 ```{webr-r}
 starwars %>% 
   filter(name == "Luke Skywalker") %>%  
-  select(name, films) %>% 
-  lapply(class)
+  .$films
 ```
 
 Because lists are very flexible and can contain any data type, it is possible to have a list-column of data frames. 
@@ -124,7 +123,14 @@ starwars %>%
   group_nest(sex) 
 ```
 
-It is now possible to apply any function that takes a data frame as an input to each data frame from the `data` list-column.
+It is now possible to apply any function that takes a data frame as an input to each data frame from the `data` list-column:
+
+```{webr-r}
+starwars %>% 
+  group_nest(sex) %>%
+  mutate(regression = lapply(data, \(x)(lm(height ~ mass, data = x))),
+         summary = lapply(regression, summary)) 
+```
 
 ## Data visualization
 
