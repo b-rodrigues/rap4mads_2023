@@ -266,7 +266,27 @@ The most important concepts for this course are discussed in the following
 sections:
 
 - functions that take functions as arguments [(section 7.4)](https://b-rodrigues.github.io/modern_R/defining-your-own-functions.html#functions-that-take-functions-as-arguments-writing-your-own-higher-order-functions)
+
+```{webr-r}
+my_func <- function(x, func, ...){
+  func(x, ...)
+}
+
+my_func(c(1, 8, 1, NA, 8), mean, na.rm = TRUE)
+```
+
 - functions that take data (and the data's columns) as arguments [(section 7.6)](https://b-rodrigues.github.io/modern_R/defining-your-own-functions.html#functions-that-take-columns-of-data-as-arguments);
+
+```{webr-r}
+simple_function <- function(dataset, col_name){
+  dataset %>%
+    group_by({{col_name}}) %>%
+    summarise(mean_mpg = mean(mpg))
+}
+
+
+simple_function(mtcars, cyl)
+```
 
 ## Functional programming
 
