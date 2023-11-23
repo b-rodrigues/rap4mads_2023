@@ -38,9 +38,7 @@ This will list every object defined in the global environment. Now run the
 following line:
 
 ```{webr-r}
-
 x <- 1
-
 ```
 
 and then `ls()` again. `x` should now be listed alongside the other objects. You
@@ -48,9 +46,7 @@ just manipulated the state of your current R session. Now if you run something
 like:
 
 ```{webr-r}
-
 x + 1
-
 ```
 
 This will produce `2`. We want to avoid pipelines that depend on some definition
