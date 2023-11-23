@@ -174,7 +174,7 @@
     "href": "03-functional-programming.html#defining-your-own-functions",
     "title": "2  A primer on functional programming",
     "section": "2.2 Defining your own functions",
-    "text": "2.2 Defining your own functions\nLet’s first learn about actually writing functions. Read chapter 7 of my other book.\nThe most important concepts for this course are discussed in the following sections:\n\nfunctions that take functions as arguments (section 7.4)\nfunctions that take data (and the data’s columns) as arguments (section 7.6);",
+    "text": "2.2 Defining your own functions\nLet’s first learn about actually writing functions. Read chapter 7 of my other book.\nThe most important concepts for this course are discussed in the following sections:\n\nfunctions that take functions as arguments (section 7.4)\n\n\n  🟡 Loading\n    webR...\n  \n    \n    \n      \n    \n  \n  \n  \n\n\n\nfunctions that take data (and the data’s columns) as arguments (section 7.6);\n\n\n  🟡 Loading\n    webR...",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>A primer on functional programming</span>"
     ]
