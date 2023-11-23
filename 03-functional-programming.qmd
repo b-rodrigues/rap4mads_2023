@@ -1,3 +1,10 @@
+---
+filters:
+  - webr
+webr:
+  packages: ['dplyr', 'purrr', 'tidyr', 'withr']
+---
+
 # A primer on functional programming
 
 <div style="text-align:center;">
@@ -23,14 +30,14 @@ functions that manipulate the global state.
 
 But what is state? Run the following code in your console:
 
-```{r, eval = F}
+```{webr-r}
 ls()
 ```
 
 This will list every object defined in the global environment. Now run the
 following line:
 
-```{r, eval = F}
+```{webr-r}
 
 x <- 1
 
@@ -40,7 +47,7 @@ and then `ls()` again. `x` should now be listed alongside the other objects. You
 just manipulated the state of your current R session. Now if you run something
 like:
 
-```{r, eval = F}
+```{webr-r}
 
 x + 1
 
@@ -57,7 +64,7 @@ As a more realistic example, imagine that within the pipeline you set up, some
 random numbers are generated. For example, to generate 10 random draws from a
 normal distribution:
 
-```{r}
+```{webr-r}
 rnorm(n = 10)
 ```
 
@@ -66,7 +73,7 @@ is obviously a good thing in interactive data analysis, but much less so when
 running a pipeline programmatically. R provides a way to fix the random seed,
 which will make sure you always get the same random numbers:
 
-```{r}
+```{webr-r}
 set.seed(1234)
 rnorm(n = 10)
 ```
@@ -74,7 +81,7 @@ rnorm(n = 10)
 But `set.seed()` only works for one call, so you must call it again if you need
 the random numbers again:
 
-```{r}
+```{webr-r}
 set.seed(1234)
 rnorm(10)
 
@@ -97,7 +104,7 @@ to run code with some temporary defined variables, without altering the global
 environment. For example, it is possible to run a `rnorm()` with a seed, using
 `withr::with_seed()`:
 
-```{r}
+```{webr-r}
 library(withr)
 
 with_seed(seed = 1234, {
@@ -110,7 +117,7 @@ that is pure. To turn an impure function into a pure function, you usually only
 need to add some arguments to it. This is how we would create a `pure_rnorm()`
 function:
 
-```{r}
+```{webr-r}
 pure_rnorm <- function(..., seed){
 
   with_seed(seed, rnorm(...))
@@ -146,8 +153,8 @@ doing at first glance. There are only two solutions in this case:
 
 For example, consider the following code:
 
-```{r}
-suppressPackageStartupMessages(library(dplyr))
+```{webr-r}
+library(dplyr)
 
 data(starwars)
 
@@ -191,7 +198,7 @@ I’m using `unlist()` as well. If you compare this mess to a
 functional approach, I hope that I can stop my diatribe against imperative style
 programming here:
 
-```{r}
+```{webr-r}
 starwars %>%
   group_by(is_human = species == "Human") %>%
   summarise(mean_height = mean(height, na.rm = TRUE))
@@ -224,7 +231,7 @@ our programs in this way, as a sequence of function calls, we get many benefits.
 Functions are easy to test, document, maintain, share and can be composed. This
 allows us to very succintly express complex workflows:
 
-```{r}
+```{webr-r}
 starwars %>%
   filter(skin_color == "light") %>%
   select(species, sex, mass) %>%
