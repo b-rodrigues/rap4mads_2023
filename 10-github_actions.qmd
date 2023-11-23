@@ -1,4 +1,4 @@
-# (Very) basic CI/CD with Github Actions
+# Intro to CI/CD with Github Actions
 
 <div style="text-align:center;">
 ```{r, echo = F}
@@ -17,20 +17,19 @@ requires some manual steps. And maybe that's not a problem; if your image is don
 need to pull it and run the container, that's not really a big problem. But you should keep in mind
 that manual steps don't scale. Let's imagine another context; let's suppose that you are part of a
 company and that you are part of a team that needs to quickly ship products to clients. Maybe
-several people contribute to the product using, an internal version control solution (like a Gitlab
+several people contribute to the product using an internal version control solution (like a Gitlab
 instance that is deployed on the premises of your company). Maybe you even need to work on several
 products in the same day; you (and your teammates) should only be focusing writing code (and
 `Dockerfiles`)... your time and resources cannot get clogged by building images (which depending on
-what you're working on, can take quite some time). So ideally, we would want to offload these step.
-That is what we are going to learn it. I should also note that this is going to be the shortest
-chapter of this course. I'm not an expert on CI/CD with Github Actions, but wanted to show to you,
-first of all, that this exists, and second of all, how you could get started.
+what you're working on, can take quite some time). So ideally, we would want to automate this step.
+That is what we are going to learn in this chapter.
 
-So consider this chapter a very basic intro to CI/CD (Continuous Integration and Continuous
-Deployment/Delivery) and DevOps. In fact, to be more precise, we should be talking about GitOps.
+This chapter will introduce you to the basic ideas of CI/CD (Continuous Integration and Continuous
+Deployment/Delivery) and DevOps with Github Actions. Because we’re using Git to trigger all the events
+and automate the whole pipeline, this can also be referred to as GitOps.
 What's Dev(Git)Ops? I think that the [Atlassian](https://www.atlassian.com/devops) page on DevOps makes
 a good job of explaining it. The bottom line is that DevOps makes it easy for developers to focus on
-coding, and make it easy for them to ship data products. The core IT team provides the required
+coding, and makes it easy for them to ship data products. The core IT team provides the required
 infrastructure and tools to make this possible. GitOps is a variant of DevOps where the definition 
 of the infrastructure is versioned, and can be changed by editing simple text files. Through events,
 such as pushing to the repository, new images can be built, or containers executed. Data products
@@ -173,7 +172,9 @@ For now, let's focus on the `run` statements, because these should be familiar:
 ```
 run: docker build -t my-image-name .
 ```
+
 and:
+
 ```
 run: docker run --rm --name my_pipeline_container -v /github/workspace/fig/:/home/graphs/:rw my-image-name
 ```
@@ -209,7 +210,7 @@ change, and let's take a look at these artifacts!
 As you can see from the video above, a zip file is now available and can be downloaded. This
 zip contains our plots! It is thus possible to rerun our workflow in the cloud. This has the 
 advantage that we can now focus on simply changing the code, and not have to bother with
-useless manual steps. For example, let's change this target in the `_targets.R` file:
+boring manual steps. For example, let's change this target in the `_targets.R` file:
 
 ```
 tar_target(
@@ -240,6 +241,16 @@ It is also possible to "deploy" the plots directly to another branch, and do muc
 to give you a little taste of Github Actions (and more generally GitOps). The possibilities are virtually
 limitless, and I still can't get over the fact that Github Actions is free (well, up to 
 [2000 compute minutes and 500MB storage per month](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions)).
+
+## Building a Docker image and pushing it to a registry
+
+It is also possible to build a Docker image and have it made available on an image registry.
+You can see how this works on this [repository](https://github.com/b-rodrigues/ga_demo).
+This images can then be used as a base for other RAPs, as in this [repository](https://github.com/b-rodrigues/ga_demo_rap/tree/main).
+Why do this? Well because of "separation of concerns". You could have a repository which builds in image
+containing your development environment: this could be an image with a specific version of R and R packages. And then
+have as many repositories as projects that run RAPs using that development environment image as a basis. Simply add the 
+project-specific packages that you need for each project.
 
 ## Further reading
 
