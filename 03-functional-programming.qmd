@@ -278,15 +278,32 @@ my_func(c(1, 8, 1, NA, 8), mean, na.rm = TRUE)
 - functions that take data (and the data's columns) as arguments [(section 7.6)](https://b-rodrigues.github.io/modern_R/defining-your-own-functions.html#functions-that-take-columns-of-data-as-arguments);
 
 ```{webr-r}
-simple_function <- function(dataset, col_name){
+simple_function <- function(dataset, col_name, var_name, fn_name){
   dataset %>%
-    group_by({{col_name}}) %>%
-    summarise(mean_mpg = mean(mpg))
+    group_by(across({{col_name}})) %>%
+    summarise("{{fn_name}}_{{var_name}}" := {{fn_name}}({{var_name}}))
 }
 
+# Group by one column
+simple_function(mtcars, vs, mpg, sd)
 
-simple_function(mtcars, cyl)
+# Group by several columns
+simple_function(mtcars, c(am, vs), mpg, sd)
+
+# Even more general: group by any columns and apply any number of functions
+simple_function <- function(dataset, cols, vars, fns){
+  dataset %>%
+    group_by(across({{cols}})) %>%
+    summarise(across({{vars}}, fns, .names = "{.fn}_{.col}"))
+}
+
+simple_function(mtcars, c(am, vs), c(mpg, hp), list("mean" = mean, "sd" = sd))
+
 ```
+
+Read more about it [here](https://dplyr.tidyverse.org/reference/across.html) and 
+[here](https://dplyr.tidyverse.org/articles/programming.html).
+
 
 ## Functional programming
 
@@ -295,6 +312,21 @@ You should ideally work through the whole of chapter 7, and then tackle [chapter
 important there are:
 
 - `purrr::map()`, `purrr::reduce()` (sections [8.3.1](https://b-rodrigues.github.io/modern_R/functional-programming.html#doing-away-with-loops-the-map-family-of-functions) and [8.3.2](https://b-rodrigues.github.io/modern_R/functional-programming.html#reducing-with-purrr))
+
+Apply a function to each element of a vector or list:
+
+```{webr-r}
+map(seq(1:10), sqrt)
+```
+
+(`lapply()` is a base function that works similarly to `purrr::map()`)
+
+Reduce a vector to a single element by iteratively applying a function:
+
+```{webr-r}
+reduce(seq(1:10), `+`)
+```
+
 - And list based workflows (section [8.4](https://b-rodrigues.github.io/modern_R/functional-programming.html#functional-programming-and-plotting))
 
 ## Further reading
