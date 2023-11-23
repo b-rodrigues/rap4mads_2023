@@ -218,4 +218,4 @@ This will run the pipeline and build the output. If the output is a rendered Qua
 
 It is also possible to run a `{targets}` pipeline on Github Actions quite easily. Run `rix::tar_nix_ga()` to add the file `.github/workflows/run-pipeline.yaml` to your project. 
 Now, each time you push changes to your Github repository, the pipeline will be executed. Don’t forget to give read and write rights to the Github Actions bot. You will find
-the outputs of the pipeline in the `targets-run` branch of your repository.
+the outputs of the pipeline in the `targets-run` branch of your repository. See this [repository](https://github.com/b-rodrigues/chronicler_targets_pipeline) for an example.
