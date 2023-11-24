@@ -50,6 +50,16 @@
     ]
   },
   {
+    "objectID": "index.html#what-actually-is-reproducibility",
+    "href": "index.html#what-actually-is-reproducibility",
+    "title": "Building Reproducible Analytical Pipelines",
+    "section": "What actually is reproducibility?",
+    "text": "What actually is reproducibility?\nA reproducible project means that this project can be rerun by anyone at 0 (or very minimal) cost. But there are different levels of reproducibility, and I will discuss this in the next section. Let’s first discuss some requirements that a project must have to be considered a RAP.\n\nThe requirements of a RAP\nFor something to be truly reproducible, it has to respect the following bullet points:\n\nSource code must obviously be available and thoroughly tested and documented (which is why we will be using Git and Github);\nAll the dependencies must be easy to find and install (we are going to deal with this using dependency management tools);\nTo be written with an open source programming language (nocode tools like Excel are by default non-reproducible because they can’t be used non-interactively, and which is why we are going to use the R programming language);\nThe project needs to be run on an open source operating system (thankfully, we can deal with this without having to install and learn to use a new operating system, thanks to Docker);\nData and the paper/report need obviously to be accessible as well, if not publicly as is the case for research, then within your company.\n\nAlso, reproducibility is on a continuum, and depending on the constraints you face your project can be “not very reproducible” to “totally reproducible”. Let’s consider the following list of anything that can influence how reproducible your project truly is:\n\nVersion of the programming language used;\nVersions of the packages/libraries of said programming language used;\nOperating System, and its version;\nVersions of the underlying system libraries (which often go hand in hand with OS version, but not necessarily).\nAnd even the hardware architecture that you run all that software stack on.\n\nSo by “reproducibility is on a continuum”, what I mean is that you could set up your project in a way that none, one, two, three, four or all of the preceding items are taken into consideration when making your project reproducible.\nThis is not a novel, or new idea. Peng (2011) already discussed this concept but named it the reproducibility spectrum.\n\n\n\nThe reproducibility spectrum from Peng’s 2011 paper.",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
     "objectID": "index.html#why-r-why-not-insert-your-favourite-programming-language",
     "href": "index.html#why-r-why-not-insert-your-favourite-programming-language",
     "title": "Building Reproducible Analytical Pipelines",
@@ -104,7 +114,7 @@
     "href": "index.html#license",
     "title": "Building Reproducible Analytical Pipelines",
     "section": "License",
-    "text": "License\nThis course is licensed under the WTFPL.",
+    "text": "License\nThis course is licensed under the WTFPL.\n\n\n\n\n\nPeng, Roger D. 2011. “Reproducible Research in Computational Science.” Science 334 (6060): 1226–27.",
     "crumbs": [
       "Introduction"
     ]

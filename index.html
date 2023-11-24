@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -276,6 +296,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#reproducible-analytical-pipelines" id="toc-reproducible-analytical-pipelines" class="nav-link" data-scroll-target="#reproducible-analytical-pipelines">Reproducible analytical pipelines?</a></li>
   <li><a href="#data-products" id="toc-data-products" class="nav-link" data-scroll-target="#data-products">Data products?</a></li>
   <li><a href="#machine-learning" id="toc-machine-learning" class="nav-link" data-scroll-target="#machine-learning">Machine learning?</a></li>
+  <li><a href="#what-actually-is-reproducibility" id="toc-what-actually-is-reproducibility" class="nav-link" data-scroll-target="#what-actually-is-reproducibility">What actually is reproducibility?</a>
+  <ul class="collapse">
+  <li><a href="#the-requirements-of-a-rap" id="toc-the-requirements-of-a-rap" class="nav-link" data-scroll-target="#the-requirements-of-a-rap">The requirements of a RAP</a></li>
+  </ul></li>
   <li><a href="#why-r-why-not-insert-your-favourite-programming-language" id="toc-why-r-why-not-insert-your-favourite-programming-language" class="nav-link" data-scroll-target="#why-r-why-not-insert-your-favourite-programming-language">Why R? Why not [insert your favourite programming language]</a></li>
   <li><a href="#pre-requisites" id="toc-pre-requisites" class="nav-link" data-scroll-target="#pre-requisites">Pre-requisites</a></li>
   <li><a href="#grading" id="toc-grading" class="nav-link" data-scroll-target="#grading">Grading</a></li>
@@ -370,6 +394,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>But what about machine learning? Well, depending what you’ll end up doing, you might indeed focus a lot on machine learning and/or statistical modeling. That being said, in practice, it is very often much more efficient to let some automl algorithm figure out the best hyperparameters of a XGBoost model and simply use that, at least as a starting point (but good luck improving upon automl…). What matters, is that the data you’re feeding to your model is clean, that your analysis is sensible, and most importantly, that it could be understood by someone taking over (imagine you get sick) and rerun with minimal effort in the future. The model here should simply be a piece that could be replaced by another model without much impact. The model is rarely central… but of course there are exceptions to this, especially in research, but every other point I’ve made still stands. It’s just that not only do you have to care about your model a lot, you also have to care about everything else.</p>
 <p>So in this course we’re going to learn a bit of all of this. We’re going to learn how to write reusable code, learn some basics of the Linux command line, Git and Docker.</p>
 </section>
+<section id="what-actually-is-reproducibility" class="level2">
+<h2 class="anchored" data-anchor-id="what-actually-is-reproducibility">What actually is reproducibility?</h2>
+<p>A reproducible project means that this project can be rerun by anyone at 0 (or very minimal) cost. But there are different levels of reproducibility, and I will discuss this in the next section. Let’s first discuss some requirements that a project must have to be considered a RAP.</p>
+<section id="the-requirements-of-a-rap" class="level3">
+<h3 class="anchored" data-anchor-id="the-requirements-of-a-rap">The requirements of a RAP</h3>
+<p>For something to be truly reproducible, it has to respect the following bullet points:</p>
+<ul>
+<li>Source code must obviously be available and thoroughly tested and documented (which is why we will be using Git and Github);</li>
+<li>All the dependencies must be easy to find and install (we are going to deal with this using dependency management tools);</li>
+<li>To be written with an open source programming language (nocode tools like Excel are by default non-reproducible because they can’t be used non-interactively, and which is why we are going to use the R programming language);</li>
+<li>The project needs to be run on an open source operating system (thankfully, we can deal with this without having to install and learn to use a new operating system, thanks to Docker);</li>
+<li>Data and the paper/report need obviously to be accessible as well, if not publicly as is the case for research, then within your company.</li>
+</ul>
+<p>Also, reproducibility is on a continuum, and depending on the constraints you face your project can be “not very reproducible” to “totally reproducible”. Let’s consider the following list of anything that can influence how reproducible your project truly is:</p>
+<ul>
+<li>Version of the programming language used;</li>
+<li>Versions of the packages/libraries of said programming language used;</li>
+<li>Operating System, and its version;</li>
+<li>Versions of the underlying system libraries (which often go hand in hand with OS version, but not necessarily).</li>
+<li>And even the hardware architecture that you run all that software stack on.</li>
+</ul>
+<p>So by “reproducibility is on a continuum”, what I mean is that you could set up your project in a way that none, one, two, three, four or all of the preceding items are taken into consideration when making your project reproducible.</p>
+<p>This is not a novel, or new idea. <span class="citation" data-cites="peng2011">Peng (<a href="#ref-peng2011" role="doc-biblioref">2011</a>)</span> already discussed this concept but named it the <em>reproducibility spectrum</em>.</p>
+<figure class="figure">
+<img src="img/repro_spectrum.png" alt="The reproducibility spectrum from Peng's 2011 paper." class="figure-img">
+<figcaption>
+The reproducibility spectrum from Peng’s 2011 paper.
+</figcaption>
+</figure>
+</section>
+</section>
 <section id="why-r-why-not-insert-your-favourite-programming-language" class="level2">
 <h2 class="anchored" data-anchor-id="why-r-why-not-insert-your-favourite-programming-language">Why R? Why not [insert your favourite programming language]</h2>
 <p>In my absolutely objective opinion R is currently the most interesting and simple language you can use to create such data products. If you learn R you have access to almost 20’000 packages (as of October 2023) to:</p>
@@ -450,6 +505,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="http://www.wtfpl.net/"><img src="img/wtfpl-badge-4.png" width="80" height="15" alt="WTFPL"></a></p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-peng2011" class="csl-entry" role="listitem">
+Peng, Roger D. 2011. <span>“Reproducible Research in Computational Science.”</span> <em>Science</em> 334 (6060): 1226–27.
+</div>
+</div>
 </section>
 </section>
 
