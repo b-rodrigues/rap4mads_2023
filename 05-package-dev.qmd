@@ -268,7 +268,7 @@ by packages from the `tidyverse` (like `{dplyr}`, `{tidyr}`, etc). If you write 
 that depend on `{dplyr}` functions like `filter()`, `select()` etc, you'll have to know to keep using `{{}}`.
 
 Let's now write a more useful function. Remember the datasets about unemployment in Luxembourg?
-I'm thinking about the ones [here](https://rap4mads.eu/introduction-to-r.html#reading-in-data-with-r),
+I'm thinking about the ones [here](https://rap4mads.eu/02-intro_R.html#reading-in-data-with-r),
 `unemp_2013.csv`, `unemp_2014.csv`, etc.
 
 Let's write a function that does some basic transformations on these files:
