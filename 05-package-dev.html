@@ -487,7 +487,7 @@ Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
 </div>
 <p>And it’s working!</p>
 <p><code>{{}}</code> is not a feature available in a base installation of R, but is provided by packages from the <code>tidyverse</code> (like <code>{dplyr}</code>, <code>{tidyr}</code>, etc). If you write functions that depend on <code>{dplyr}</code> functions like <code>filter()</code>, <code>select()</code> etc, you’ll have to know to keep using <code>{{}}</code>.</p>
-<p>Let’s now write a more useful function. Remember the datasets about unemployment in Luxembourg? I’m thinking about the ones <a href="https://rap4mads.eu/introduction-to-r.html#reading-in-data-with-r">here</a>, <code>unemp_2013.csv</code>, <code>unemp_2014.csv</code>, etc.</p>
+<p>Let’s now write a more useful function. Remember the datasets about unemployment in Luxembourg? I’m thinking about the ones <a href="https://rap4mads.eu/02-intro_R.html#reading-in-data-with-r">here</a>, <code>unemp_2013.csv</code>, <code>unemp_2014.csv</code>, etc.</p>
 <p>Let’s write a function that does some basic transformations on these files:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>clean_unemp <span class="ot">&lt;-</span> <span class="cf">function</span>(unemp_data, level, col_of_interest){</span>
