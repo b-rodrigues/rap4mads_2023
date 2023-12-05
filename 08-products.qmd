@@ -1469,7 +1469,7 @@ more about it [here](https://shiny.rstudio.com/articles/shinyapps.html). You cou
 get a Virtual Private Server on a website like [Vultr](https://vultr.com) or 
 [DigitalOcean](https://www.digitalocean.com/). When signing up with these services you get some
 free credit to test things out. If you use my 
-[Vultr referral link](https://www.vultr.com/?ref=9276120-8H) you get 100USD to test the platform. 
+[Digital Ocean referral link](https://m.do.co/c/b68adc727710) you get 200USD to test the platform. 
 This is more than enough to get a basic VPS with Ubuntu on it. You can then try to install
 everything needed to deploy Shiny apps from your VPS. You could follow [this
 guide](https://www.marinedatascience.co/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/)
