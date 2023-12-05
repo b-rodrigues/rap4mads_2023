@@ -1488,7 +1488,8 @@ We will now put everything together and create a `{targets}` pipeline to build a
 from start to finish. Let's go back to one of the pipelines we wrote in Chapter 7. If you're
 using RStudio, start a new project and make it `renv`-enabled by checking the required checkbox.
 If you're using another editor, start with an empty folder and run `renv::init()`. Now create a new
-script with the following code:
+script with the following code (create the script `functions.R` and put the `get_data()` function
+in it, as described [here](https://rap4mads.eu/07-targets.html#our-actual-first-pipeline)):
 
 ```{r, eval = F}
 library(targets)
