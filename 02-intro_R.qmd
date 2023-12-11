@@ -13,6 +13,8 @@ knitr::include_graphics("img/abacus.png")
 ```
 </div>
 
+hello students
+
 What you'll have learned by the end of the chapter: reading and writing,
 exploring (and optionally visualising) data.
 
