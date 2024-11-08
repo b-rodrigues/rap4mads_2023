@@ -753,7 +753,7 @@ make_plot <- function(data){
 }
 ```
 
-If you know save the script, and check the pipeline with `tar_visnetwork()`, you will see that some targets are not out of date:
+If you now save the script, and check the pipeline with `tar_visnetwork()`, you will see that some targets are not out of date:
 
 
 ```{r, echo = F}
