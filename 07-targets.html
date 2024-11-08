@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.455">
+<meta name="generator" content="quarto-1.4.554">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -98,6 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -118,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./07-targets.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Setting up pipelines with `{targets}`</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./07-targets.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Setting up pipelines with <code>{targets}</code></span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -305,7 +306,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div style="text-align:center;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="img/pipeline.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="img/pipeline.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -319,7 +324,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>As an introduction, there really is not a better source than the <code>{targets}</code> manual itself, and in particular the <a href="https://books.ropensci.org/targets/walkthrough.html">walkthrough section</a>. After reading this section, we have the basic knowledge to build our first pipeline. The goal of this pipeline will be to simply create a plot using the unemployment data we’ve been working on. Let’s create a new project in RStudio, but make sure that you check the following boxes:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="img/pipeline_1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="img/pipeline_1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>You should see the following message in the R console:</p>
@@ -593,7 +602,11 @@ Do you want to proceed? [y/N]: </code></pre>
 <div style="text-align:center;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="img/mario.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="img/mario.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -727,7 +740,11 @@ Do you want to proceed? [y/N]: </code></pre>
 <p>At this stage it might be interesting to take a look at the network. Call <code>tar_visnetwork()</code> (you might get prompted to install yet another package) and take a look at the pipeline:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="img/pipeline_2.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="img/pipeline_2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>All that’s missing now is to write a function to create plots. Since we didn’t learn how to make them using <code>{ggplot2}</code>, simply copy the code below into the <code>functions.R</code> script:</p>
@@ -802,7 +819,11 @@ Do you want to proceed? [y/N]: </code></pre>
 <p>Let’s now take a look at the pipeline again with <code>tar_visnetwork()</code>:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="img/pipeline_3.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="img/pipeline_3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We see that new targets are outdated, and we need to run the pipeline to build them, so run the pipeline using <code>tar_make()</code>. If everything went well, we can now take a look at our plots using <code>tar_read(luxembourg_plot)</code>.</p>
@@ -889,7 +910,11 @@ Do you want to proceed? [y/N]: </code></pre>
 <p>Let’s take a look at the network again:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="img/pipeline_4.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="img/pipeline_4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Because we are saving a file to disk, we must add the <code>format = "file"</code> argument to the target definiton. This way, <code>{targets}</code> watches these files for changes as well, and reruns the pipeline if a change is detected. Run the pipeline now with <code>tar_make()</code> and watch the plots appear in the <code>fig</code> folder (which you may have to create before running the pipeline).</p>
@@ -909,10 +934,14 @@ Do you want to proceed? [y/N]: </code></pre>
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"Unemployement for "</span>, <span class="fu">paste</span>(<span class="fu">unique</span>(data<span class="sc">$</span>place_name), <span class="at">collapse =</span> <span class="st">", "</span>)))</span>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>If you know save the script, and check the pipeline with <code>tar_visnetwork()</code>, you will see that some targets are not out of date:</p>
+<p>If you now save the script, and check the pipeline with <code>tar_visnetwork()</code>, you will see that some targets are not out of date:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="img/pipeline_5.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="img/pipeline_5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Every targets that gets made by <code>make_plot()</code> must be recomputed, and every targets that depends on the intemediary outputs of <code>make_plot()</code> as well. Reloading the data is not necessary, since the edits on <code>make_plot()</code> do not affect these targets. This is an incredible cognitive load that is taken off the shoulders of data scientists; no need to keep track of outputs that are outdated, and no need to re-run everything either, saving lots of time and processing power.</p>
@@ -946,7 +975,11 @@ Do you want to proceed? [y/N]: </code></pre>
 <p>As you can see from the screenshot below, because the packages used for this pipeline are not old(ish), they get either download from MRAN or from CRAN’s archive (MRAN is the Microsoft R Archive Network, a mirror of CRAN maintained by Microsoft, which gets snapshotted every day. It is thus possible to download old packages from there):</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="img/pipeline_6.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="img/pipeline_6.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>You should now restart your R session for good measure (go to <code>Session -&gt; Restart Session</code>). You can now run the pipeline simply with:</p>
@@ -960,7 +993,11 @@ Do you want to proceed? [y/N]: </code></pre>
 <div style="text-align:center;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="img/calendar.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="img/calendar.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -1216,6 +1253,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -1250,7 +1305,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -1265,38 +1324,28 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
     stripColumnClz(note)
-    const typesetMath = (el) => {
-      if (window.MathJax) {
-        // MathJax Typeset
-        window.MathJax.typeset([el]);
-      } else if (window.katex) {
-        // KaTeX Render
-        var mathElements = el.getElementsByClassName("math");
-        var macros = [];
-        for (var i = 0; i < mathElements.length; i++) {
-          var texText = mathElements[i].firstChild;
-          if (mathElements[i].tagName == "SPAN") {
-            window.katex.render(texText.data, mathElements[i], {
-              displayMode: mathElements[i].classList.contains('display'),
-              throwOnError: false,
-              macros: macros,
-              fleqn: false
-            });
-          }
-        }
-      }
-    }
     if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
-        typesetMath(container);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
         return container.innerHTML
       } else {
-        typesetMath(note);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
         return note.innerHTML;
       }
     } else {
@@ -1305,8 +1354,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (anchorLink) {
         anchorLink.remove();
       }
-      typesetMath(note);
-      return note.innerHTML;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
     }
   }
   for (var i=0; i<xrefs.length; i++) {
@@ -1529,12 +1585,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./06-unit-tests.html" class="pagination-link  aria-label=" &lt;span="" tests&lt;="" span&gt;"="">
+      <a href="./06-unit-tests.html" class="pagination-link" aria-label="Unit tests">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Unit tests</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./08-products.html" class="pagination-link" aria-label="<span class='chapter-number'>7</span>&nbsp; <span class='chapter-title'>Data products</span>">
+      <a href="./08-products.html" class="pagination-link" aria-label="Data products">
         <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data products</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -1544,4 +1600,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-</body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/b-rodrigues/rap4mads_2023/edit/main/07-targets.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer></body></html>
