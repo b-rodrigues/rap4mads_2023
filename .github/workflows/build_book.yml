@@ -30,5 +30,8 @@ jobs:
 
     - name: Publish to GitHub Pages (and render)
       uses: rstats-on-nix/quarto-nix-actions/publish@main
+      with:
+        render: true
+        target: gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
