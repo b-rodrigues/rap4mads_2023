@@ -29,6 +29,6 @@ jobs:
         nix-build
 
     - name: Publish to GitHub Pages (and render)
-      uses: b-rodrigues/quarto-nix-actions/publish@main
+      uses: rstats-on-nix/quarto-nix-actions/publish@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
